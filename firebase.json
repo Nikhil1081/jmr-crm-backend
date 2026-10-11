@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "jmr-crm-portal-2026",
     "public": ".",
     "ignore": [
       "firebase.json",
