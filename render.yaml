@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: jmr-crm-backend
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt && python seed_jmr_600.py
+    startCommand: uvicorn crm_portal_single_file:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false
+      - key: SECRET_KEY
+        generateValue: true

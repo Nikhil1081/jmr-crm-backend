@@ -1,0 +1,24 @@
+{
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/__pycache__/**",
+      "**/*.py",
+      "**/*.db",
+      "**/*.sqlite*",
+      "Procfile",
+      "requirements.txt",
+      "README.md",
+      "render.yaml",
+      "Dockerfile"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

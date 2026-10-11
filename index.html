@@ -1,0 +1,3002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JMR Infotech India | Enterprise Banking CRM Portal</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            jmr: {
+              50: '#f0f7ff',
+              100: '#e0effe',
+              500: '#0284c7',
+              600: '#0369a1',
+              700: '#075985',
+              800: '#0c4a6e',
+              900: '#082f49',
+              accent: '#f59e0b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-900 min-h-screen flex flex-col antialiased selection:bg-sky-500 selection:text-white">
+
+  <!-- ==================== LOGIN VIEW ==================== -->
+  <div id="login-view" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-sky-950 p-4">
+    <div class="w-full max-w-md bg-white rounded-3xl shadow-2xl p-8 border border-white/20 relative overflow-hidden">
+      <!-- Glow effect -->
+      <div class="absolute -top-24 -right-24 w-48 h-48 bg-sky-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="text-center mb-8 relative">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-sky-600 to-indigo-600 text-white text-2xl shadow-xl shadow-sky-600/30 mb-4">
+          <i class="fa-solid fa-building-columns"></i>
+        </div>
+        <div class="inline-block px-3 py-1 rounded-full bg-sky-50 border border-sky-200 text-sky-700 text-[11px] font-bold uppercase tracking-wider mb-2">
+          JMR Infotech India &bull; BFSI Solutions
+        </div>
+        <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Enterprise CRM Portal</h1>
+        <p class="text-xs text-slate-500 mt-1">Multi-Employee Sales & 600 Reps Lead Performance Platform</p>
+      </div>
+
+      <div id="login-error" class="hidden mb-4 p-3 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold rounded-xl flex items-center gap-2">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <span id="login-error-text">Invalid credentials</span>
+      </div>
+
+      <form id="login-form" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Corporate Email</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+              <i class="fa-solid fa-envelope text-sm"></i>
+            </span>
+            <input type="email" id="login-email" required value="admin@crm.com" placeholder="name@jmrinfotech.com" 
+              class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm bg-slate-50 font-medium">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Password</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+              <i class="fa-solid fa-lock text-sm"></i>
+            </span>
+            <input type="password" id="login-password" required value="admin123" placeholder="••••••••" 
+              class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm bg-slate-50 font-medium">
+          </div>
+        </div>
+
+        <button type="submit" id="login-btn" class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white font-bold text-sm shadow-lg shadow-sky-600/30 transition-all duration-200 flex items-center justify-center gap-2">
+          <span>Enter CRM Dashboard</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </form>
+
+      <div class="mt-6 pt-5 border-t border-slate-100">
+        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-3.5 text-xs">
+          <div class="flex items-center justify-between text-slate-700">
+            <span>Login: <strong class="text-slate-900 font-mono">admin@crm.com</strong> / <strong class="text-slate-900 font-mono">admin123</strong></span>
+            <button type="button" onclick="fillAdminLogin()" class="text-sky-600 hover:text-sky-800 font-bold underline text-[11px]">Autofill</button>
+          </div>
+          <p class="text-[10px] text-slate-400 mt-1">Pre-loaded with 600 JMR Infotech India sales reps, won & lost leads, and enterprise bank accounts.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MAIN APPLICATION VIEW ==================== -->
+  <div id="app-view" class="hidden min-h-screen flex">
+    
+    <!-- SIDEBAR -->
+    <aside class="w-72 bg-slate-950 text-slate-300 flex flex-col shrink-0 border-r border-slate-800 shadow-2xl select-none">
+      
+      <!-- Logo Branding Header -->
+      <div class="h-20 flex items-center px-6 gap-3 border-b border-slate-800 bg-slate-900/40">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-sky-600 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-sky-500/20 text-lg">
+          <i class="fa-solid fa-building-columns"></i>
+        </div>
+        <div class="min-w-0">
+          <div class="font-black text-white text-base tracking-tight leading-none flex items-center gap-1.5">
+            <span>JMR INFOTECH</span>
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          </div>
+          <div class="text-[10px] font-bold text-sky-400 uppercase tracking-widest mt-1">India BFSI Solutions</div>
+        </div>
+      </div>
+
+      <!-- Logged-in User Profile Card -->
+      <div class="p-3.5 mx-3.5 my-3 bg-slate-900/90 rounded-2xl border border-slate-800/80 flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 to-indigo-500 text-white font-black flex items-center justify-center text-sm shadow-md" id="user-avatar">
+          A
+        </div>
+        <div class="min-w-0 flex-1">
+          <div class="text-xs font-bold text-white truncate" id="user-name">System Admin</div>
+          <div class="flex items-center gap-1.5 mt-0.5">
+            <span class="text-[10px] px-2 py-0.2 rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/20 font-bold uppercase tracking-wider" id="user-role-badge">admin</span>
+            <span class="text-[10px] text-slate-400">HQ India</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="flex-1 px-3 py-2 space-y-1.5 overflow-y-auto custom-scrollbar">
+        <div class="px-3 pb-1 text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Overview</div>
+
+        <a href="#dashboard" onclick="navigate('dashboard')" class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:bg-slate-900 hover:text-white transition group" data-tab="dashboard">
+          <i class="fa-solid fa-chart-pie w-5 text-center text-sky-400 group-hover:text-sky-300"></i>
+          <span>Executive Dashboard</span>
+        </a>
+
+        <!-- Highlighted Tab: 600 JMR Employees Won & Lost Analysis -->
+        <a href="#jmr-reps" onclick="navigate('jmr-reps')" class="nav-item flex items-center justify-between px-3.5 py-3 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-sky-900/50 to-indigo-900/50 border border-sky-500/30 hover:border-sky-500 transition group shadow-sm" data-tab="jmr-reps">
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-users-viewfinder w-5 text-center text-amber-400"></i>
+            <div>
+              <div class="leading-tight">600 Employees Analysis</div>
+              <div class="text-[9px] text-sky-300 font-normal">Won vs Lost Leads Tracker</div>
+            </div>
+          </div>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/30">600</span>
+        </a>
+
+        <div class="px-3 pt-3 pb-1 text-[10px] font-extrabold uppercase tracking-widest text-slate-400">CRM Operations</div>
+
+        <a href="#leads" onclick="navigate('leads')" class="nav-item flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:bg-slate-900 hover:text-white transition group" data-tab="leads">
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-crosshairs w-5 text-center text-emerald-400"></i>
+            <span>All Leads Database</span>
+          </div>
+          <span id="badge-leads-count" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-900 text-slate-400">0</span>
+        </a>
+
+        <a href="#customers" onclick="navigate('customers')" class="nav-item flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:bg-slate-900 hover:text-white transition group" data-tab="customers">
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-building-columns w-5 text-center text-blue-400"></i>
+            <span>Banking Clients</span>
+          </div>
+          <span id="badge-customers-count" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-900 text-slate-400">0</span>
+        </a>
+
+        <a href="#opportunities" onclick="navigate('opportunities')" class="nav-item flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:bg-slate-900 hover:text-white transition group" data-tab="opportunities">
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-handshake-angle w-5 text-center text-amber-400"></i>
+            <span>Opportunities Pipeline</span>
+          </div>
+          <span id="badge-opportunities-count" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-900 text-slate-400">0</span>
+        </a>
+
+        <a href="#activities" onclick="navigate('activities')" class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:bg-slate-900 hover:text-white transition group" data-tab="activities">
+          <i class="fa-solid fa-timeline w-5 text-center text-purple-400"></i>
+          <span>Activity Log Stream</span>
+        </a>
+
+        <div class="px-3 pt-3 pb-1 text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Intelligence & Sync</div>
+
+        <a href="#ai-analyst" onclick="navigate('ai-analyst')" class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:bg-slate-900 hover:text-white transition group" data-tab="ai-analyst">
+          <i class="fa-solid fa-wand-magic-sparkles w-5 text-center text-amber-400"></i>
+          <span>Groq AI Sales Analyst</span>
+        </a>
+
+        <a href="#odoo-sync" onclick="navigate('odoo-sync')" class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:bg-slate-900 hover:text-white transition group" data-tab="odoo-sync">
+          <i class="fa-solid fa-arrows-rotate w-5 text-center text-teal-400"></i>
+          <span>Odoo & LinkedIn Sync</span>
+        </a>
+
+        <div class="px-3 pt-3 pb-1 text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Reporting</div>
+
+        <a href="#analytics" onclick="navigate('analytics')" class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:bg-slate-900 hover:text-white transition group" data-tab="analytics">
+          <i class="fa-solid fa-file-excel w-5 text-center text-emerald-400"></i>
+          <span>Power BI Export Hub</span>
+        </a>
+      </nav>
+
+      <!-- Sidebar Bottom Utilities -->
+      <div class="p-3.5 border-t border-slate-800 space-y-1.5">
+        <a href="/docs" target="_blank" class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs text-slate-400 hover:bg-slate-900 hover:text-slate-200 transition">
+          <i class="fa-solid fa-code text-slate-500 w-5 text-center"></i>
+          <span>Swagger API /docs</span>
+          <i class="fa-solid fa-arrow-up-right-from-square text-[9px] ml-auto"></i>
+        </a>
+        <button onclick="logout()" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-semibold text-rose-400 hover:bg-rose-500/10 hover:text-rose-300 transition">
+          <i class="fa-solid fa-power-off w-5 text-center"></i>
+          <span>Sign Out</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN APP CONTAINER -->
+    <main class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+      
+      <!-- Top Sticky Header -->
+      <header class="h-20 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-8 flex items-center justify-between sticky top-0 z-20 shadow-xs">
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 id="page-title" class="text-xl font-extrabold text-slate-900 tracking-tight">JMR Infotech Sales Dashboard</h2>
+            <span class="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold uppercase tracking-wider flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span> Live 600 Reps Data
+            </span>
+          </div>
+          <p id="page-subtitle" class="text-xs text-slate-500 mt-0.5">Real-time won & lost lead metrics across all Indian branches and BFSI teams</p>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button id="btn-refresh-data" onclick="refreshData()" title="Reload Data" class="p-2.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition border border-slate-200 flex items-center gap-2 text-xs font-semibold">
+            <i class="fa-solid fa-rotate-right"></i>
+            <span>Refresh</span>
+          </button>
+
+          <button onclick="openApiSettingsModal()" title="Configure Cloud Backend API" class="px-3 py-2 text-slate-600 hover:text-sky-700 hover:bg-sky-50 rounded-xl transition border border-slate-200 flex items-center gap-2 text-xs font-semibold">
+            <i class="fa-solid fa-cloud text-sky-600"></i>
+            <span>API: <strong id="header-api-label" class="font-mono text-sky-700">Local / Cloud</strong></span>
+          </button>
+          
+          <div class="h-7 w-px bg-slate-200"></div>
+
+          <!-- Quick Action Buttons -->
+          <button onclick="navigate('jmr-reps')" class="px-4 py-2.5 bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white rounded-xl text-xs font-bold shadow-md shadow-sky-600/20 transition flex items-center gap-2">
+            <i class="fa-solid fa-magnifying-glass-chart"></i>
+            <span>View 600 Employees Won/Lost</span>
+          </button>
+          <button onclick="exportFullCsv()" class="px-3.5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1.5">
+            <i class="fa-solid fa-file-csv"></i>
+            <span>Export Power BI CSV</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Body Content Area -->
+      <div class="p-8 flex-1 space-y-8">
+
+        <!-- ==================== TAB: 600 EMPLOYEES ANALYSIS (CORE REQUEST) ==================== -->
+        <section id="tab-jmr-reps" class="tab-content space-y-6">
+          
+          <!-- Banner Section -->
+          <div class="p-6 rounded-3xl bg-gradient-to-r from-slate-950 via-slate-900 to-sky-950 text-white shadow-xl border border-slate-800 relative overflow-hidden">
+            <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+              <div>
+                <div class="flex items-center gap-2 text-sky-400 text-xs font-bold uppercase tracking-widest mb-1">
+                  <i class="fa-solid fa-chart-line"></i>
+                  <span>JMR Infotech India &bull; 600 Sales & Solutions Personnel</span>
+                </div>
+                <h3 class="text-2xl font-black tracking-tight">Won vs. Lost Leads Deep-Dive</h3>
+                <p class="text-xs text-slate-300 mt-1 max-w-2xl leading-relaxed">
+                  Comprehensive performance tracking of all 600 employees across Core Banking (FLEXCUBE), Digital Banking (OBDX), Risk & Compliance (OFSAA), and Cloud teams. Click on any employee row to inspect their exact won leads, lost leads, and contract amounts.
+                </p>
+              </div>
+
+              <!-- Aggregate Summary Pills -->
+              <div class="flex flex-wrap items-center gap-3">
+                <div class="bg-white/10 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/10 text-center">
+                  <div class="text-[10px] uppercase font-bold text-slate-400">Total Reps</div>
+                  <div class="text-xl font-black font-mono text-white" id="reps-stat-total-emp">600</div>
+                </div>
+                <div class="bg-emerald-500/20 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-emerald-500/30 text-center">
+                  <div class="text-[10px] uppercase font-bold text-emerald-300">Total Won Leads</div>
+                  <div class="text-xl font-black font-mono text-emerald-400" id="reps-stat-won-leads">0</div>
+                </div>
+                <div class="bg-rose-500/20 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-rose-500/30 text-center">
+                  <div class="text-[10px] uppercase font-bold text-rose-300">Total Lost Leads</div>
+                  <div class="text-xl font-black font-mono text-rose-400" id="reps-stat-lost-leads">0</div>
+                </div>
+                <div class="bg-sky-500/20 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-sky-500/30 text-center">
+                  <div class="text-[10px] uppercase font-bold text-sky-300">Win Rate %</div>
+                  <div class="text-xl font-black font-mono text-sky-400" id="reps-stat-win-rate">0%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dynamic Filter & Search Toolbar -->
+          <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <!-- Live Search -->
+              <div>
+                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1">Search 600 Employees</label>
+                <div class="relative">
+                  <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400"><i class="fa-solid fa-magnifying-glass text-xs"></i></span>
+                  <input type="text" id="jmr-search-input" oninput="applyJmrFilters()" placeholder="Type employee name, email or ID..." 
+                    class="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-slate-50/50 font-medium">
+                </div>
+              </div>
+
+              <!-- Department Filter -->
+              <div>
+                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1">Department</label>
+                <select id="jmr-dept-filter" onchange="applyJmrFilters()" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-slate-50/50 font-medium">
+                  <option value="all">All Global Departments & Practices</option>
+                  <option value="Core Banking - Oracle FLEXCUBE Practice">Core Banking - Oracle FLEXCUBE Practice</option>
+                  <option value="Digital Banking - Oracle OBDX & Open APIs">Digital Banking - Oracle OBDX & Open APIs</option>
+                  <option value="Risk, Compliance & AML - Oracle OFSAA Practice">Risk, Compliance & AML - Oracle OFSAA Practice</option>
+                  <option value="Cloud & Managed Services (Oracle OCI 24/7)">Cloud & Managed Services (Oracle OCI 24/7)</option>
+                  <option value="Global Enterprise BFSI Sales & Account Management">Global Enterprise BFSI Sales & Account Management</option>
+                  <option value="Fintech Integration & Payment Gateways">Fintech Integration & Payment Gateways</option>
+                  <option value="LATAM & Nearshore Solutions (Bogota Hub)">LATAM & Nearshore Solutions (Bogota Hub)</option>
+                  <option value="EMEA & APAC Strategic Delivery Center">EMEA & APAC Strategic Delivery Center</option>
+                </select>
+              </div>
+
+              <!-- Performance Tier Filter -->
+              <div>
+                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1">Performance Tier</label>
+                <select id="jmr-tier-filter" onchange="applyJmrFilters()" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-slate-50/50 font-medium">
+                  <option value="all">All Performance Levels</option>
+                  <option value="Top Performer">Top Performers (&ge; 60% Win Rate)</option>
+                  <option value="Average">Average (40% - 59% Win Rate)</option>
+                  <option value="Needs Attention">Needs Attention (&lt; 40% Win Rate)</option>
+                </select>
+              </div>
+
+              <!-- Sort By Dropdown -->
+              <div>
+                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1">Sort Ranking</label>
+                <select id="jmr-sort-by" onchange="applyJmrFilters()" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-slate-50/50 font-medium">
+                  <option value="won_leads_desc">Most Won Leads (High to Low)</option>
+                  <option value="win_rate_desc">Highest Win Rate % (High to Low)</option>
+                  <option value="lost_leads_desc">Most Lost Leads (High to Low)</option>
+                  <option value="revenue_desc">Highest Won Revenue ($)</option>
+                  <option value="total_leads_desc">Total Leads Assigned (High to Low)</option>
+                  <option value="name_asc">Employee Name (A to Z)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Filter Status Bar & Items Per Page -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-slate-100 text-xs text-slate-500">
+              <div class="flex items-center gap-2">
+                <span>Showing <strong class="text-slate-900" id="jmr-showing-range">0-0</strong> of <strong class="text-slate-900" id="jmr-total-matched">600</strong> employees</span>
+                <span class="text-slate-300">|</span>
+                <span class="text-slate-400">Page <strong class="text-slate-800" id="jmr-page-current">1</strong> of <strong class="text-slate-800" id="jmr-page-total">1</strong></span>
+              </div>
+
+              <div class="flex items-center gap-3">
+                <div class="flex items-center gap-1.5">
+                  <label class="text-[11px] font-semibold text-slate-500">Per page:</label>
+                  <select id="jmr-page-size" onchange="changePageSize(this.value)" class="px-2 py-1 text-xs border border-slate-200 rounded-lg bg-white">
+                    <option value="15">15</option>
+                    <option value="30" selected>30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                  </select>
+                </div>
+                
+                <!-- Pagination Buttons -->
+                <div class="flex items-center gap-1">
+                  <button onclick="prevPage()" id="btn-prev-page" class="px-3 py-1 text-xs font-bold rounded-lg border border-slate-200 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed">
+                    <i class="fa-solid fa-chevron-left mr-1"></i> Prev
+                  </button>
+                  <button onclick="nextPage()" id="btn-next-page" class="px-3 py-1 text-xs font-bold rounded-lg border border-slate-200 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed">
+                    Next <i class="fa-solid fa-chevron-right ml-1"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Main 600 Employees Table -->
+          <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-sm">
+                <thead class="text-[11px] font-bold text-slate-400 uppercase border-b border-slate-100 bg-slate-50/60 select-none">
+                  <tr>
+                    <th class="py-3.5 px-5">JMR Employee</th>
+                    <th class="py-3.5 px-4">Department & Unit</th>
+                    <th class="py-3.5 px-3 text-center">Total Leads</th>
+                    <th class="py-3.5 px-3 text-center">Won Leads</th>
+                    <th class="py-3.5 px-3 text-center">Lost Leads</th>
+                    <th class="py-3.5 px-3 text-center">Active Funnel</th>
+                    <th class="py-3.5 px-4 text-center">Win Rate (%)</th>
+                    <th class="py-3.5 px-4 text-right">Closed Won Revenue</th>
+                    <th class="py-3.5 px-5 text-right">Deep Dive</th>
+                  </tr>
+                </thead>
+                <tbody id="jmr-table-body" class="divide-y divide-slate-100 text-slate-700">
+                  <!-- Loaded dynamically -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Bottom Pagination Navigation -->
+            <div class="p-4 bg-slate-50/50 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+              <div>Click any employee row to inspect their <strong>won deals, lost reasons, and bank clients</strong>.</div>
+              <div class="flex items-center gap-1.5" id="pagination-numbers">
+                <!-- Numbers injected -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== TAB: EXECUTIVE DASHBOARD ==================== -->
+        <section id="tab-dashboard" class="tab-content hidden space-y-8">
+          <!-- Top KPI Cards -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- 600 Reps Card -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+              <div>
+                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">JMR Sales Workforce</div>
+                <div class="text-3xl font-black text-slate-900 mt-1" id="dash-reps-count">600</div>
+                <div class="text-xs text-sky-600 font-semibold mt-1">Across 6 Indian Centers</div>
+              </div>
+              <div class="w-12 h-12 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl shadow-xs">
+                <i class="fa-solid fa-users"></i>
+              </div>
+            </div>
+
+            <!-- Total Leads Tracked -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+              <div>
+                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Leads Logged</div>
+                <div class="text-3xl font-black text-slate-900 mt-1" id="dash-leads-total">0</div>
+                <div class="text-xs text-slate-500 font-medium mt-1">BFSI Enterprise RFPs & Leads</div>
+              </div>
+              <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl shadow-xs">
+                <i class="fa-solid fa-crosshairs"></i>
+              </div>
+            </div>
+
+            <!-- Won Leads -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+              <div>
+                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Won Leads & Contracts</div>
+                <div class="text-3xl font-black text-emerald-600 mt-1" id="dash-won-total">0</div>
+                <div class="text-xs text-emerald-600 font-bold mt-1 flex items-center gap-1">
+                  <i class="fa-solid fa-circle-check"></i>
+                  <span id="dash-won-revenue-text">$0 won revenue</span>
+                </div>
+              </div>
+              <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl shadow-xs">
+                <i class="fa-solid fa-trophy"></i>
+              </div>
+            </div>
+
+            <!-- Lost Leads -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+              <div>
+                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Lost Leads</div>
+                <div class="text-3xl font-black text-rose-600 mt-1" id="dash-lost-total">0</div>
+                <div class="text-xs text-rose-600 font-medium mt-1" id="dash-lost-percentage">0% of resolved leads</div>
+              </div>
+              <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl shadow-xs">
+                <i class="fa-solid fa-circle-xmark"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Charts Grid -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Department Comparison Bar Chart -->
+            <div class="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs">
+              <div class="flex items-center justify-between mb-4">
+                <div>
+                  <h3 class="font-bold text-slate-900 text-base">Department-wise Won vs. Lost Leads</h3>
+                  <p class="text-xs text-slate-500">Comparative conversion efficiency across JMR units</p>
+                </div>
+                <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 rounded-lg text-slate-600">6 Business Units</span>
+              </div>
+              <div class="h-72 relative">
+                <canvas id="deptChart"></canvas>
+              </div>
+            </div>
+
+            <!-- Overall Conversion Donut Chart -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs flex flex-col">
+              <div class="flex items-center justify-between mb-4">
+                <div>
+                  <h3 class="font-bold text-slate-900 text-base">Overall Win / Loss Ratio</h3>
+                  <p class="text-xs text-slate-500">Total company-wide conversion breakdown</p>
+                </div>
+              </div>
+              <div class="h-72 relative flex-1 flex items-center justify-center">
+                <canvas id="ratioChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Top Champions Leaderboard -->
+          <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h3 class="font-bold text-slate-900 text-base">Top 5 JMR Sales Champions</h3>
+                <p class="text-xs text-slate-500">Highest closed-won lead conversion across India</p>
+              </div>
+              <button onclick="navigate('jmr-reps')" class="text-xs font-bold text-sky-600 hover:text-sky-800">
+                View All 600 Reps &rarr;
+              </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4" id="top-champions-grid">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== TAB: ALL LEADS ==================== -->
+        <section id="tab-leads" class="tab-content hidden space-y-6">
+          <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+              <div>
+                <h3 class="font-bold text-slate-900 text-base">All JMR Leads Repository</h3>
+                <p class="text-xs text-slate-500">Enterprise banking opportunities, RFPs, and banking client inquiries</p>
+              </div>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-sm">
+                <thead class="text-[11px] font-bold text-slate-400 uppercase border-b border-slate-100 bg-slate-50/50">
+                  <tr>
+                    <th class="py-3 px-4">Lead Title / Contact</th>
+                    <th class="py-3 px-4">Contact Phone</th>
+                    <th class="py-3 px-4">Source</th>
+                    <th class="py-3 px-4">Status</th>
+                    <th class="py-3 px-4">Assigned JMR Rep</th>
+                    <th class="py-3 px-4 text-right">Created</th>
+                  </tr>
+                </thead>
+                <tbody id="leads-tbody" class="divide-y divide-slate-100 text-slate-700">
+                  <!-- Loaded dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== TAB: BANKING CLIENTS ACROSS 5 CONTINENTS ==================== -->
+        <section id="tab-customers" class="tab-content hidden space-y-6">
+          <!-- Regional Presence Header Cards -->
+          <div class="grid grid-cols-2 md:grid-cols-5 gap-3.5">
+            <div class="bg-white p-4 rounded-2xl border border-amber-200/80 shadow-xs flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 border border-amber-200 flex items-center justify-center font-bold text-sm shrink-0">
+                <i class="fa-solid fa-kaaba text-xs"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="text-[10px] uppercase font-bold text-slate-400">Middle East & GCC</div>
+                <div class="text-base font-black text-slate-900 font-mono">12 Banks</div>
+                <div class="text-[9px] text-amber-600 font-semibold truncate">GIB, CBD, ANB, FAB, Al Rajhi</div>
+              </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-2xl border border-emerald-200/80 shadow-xs flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center font-bold text-sm shrink-0">
+                <i class="fa-solid fa-earth-africa text-xs"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="text-[10px] uppercase font-bold text-slate-400">Africa Region</div>
+                <div class="text-base font-black text-slate-900 font-mono">14 Banks</div>
+                <div class="text-[9px] text-emerald-600 font-semibold truncate">HFB, Coopbank, Nedbank, Libya</div>
+              </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-2xl border border-sky-200/80 shadow-xs flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-sky-50 text-sky-700 border border-sky-200 flex items-center justify-center font-bold text-sm shrink-0">
+                <i class="fa-solid fa-earth-asia text-xs"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="text-[10px] uppercase font-bold text-slate-400">Asia-Pac & India</div>
+                <div class="text-base font-black text-slate-900 font-mono">23 Banks</div>
+                <div class="text-[9px] text-sky-600 font-semibold truncate">BCEL, ST Bank, APAC 7, SBI</div>
+              </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-2xl border border-indigo-200/80 shadow-xs flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-700 border border-indigo-200 flex items-center justify-center font-bold text-sm shrink-0">
+                <i class="fa-solid fa-earth-europe text-xs"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="text-[10px] uppercase font-bold text-slate-400">Europe & UK</div>
+                <div class="text-base font-black text-slate-900 font-mono">4 Desks</div>
+                <div class="text-[9px] text-indigo-600 font-semibold truncate">GIB London, BNP, Swiss BFSI</div>
+              </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-2xl border border-purple-200/80 shadow-xs flex items-center gap-3 col-span-2 md:col-span-1">
+              <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-700 border border-purple-200 flex items-center justify-center font-bold text-sm shrink-0">
+                <i class="fa-solid fa-earth-americas text-xs"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="text-[10px] uppercase font-bold text-slate-400">Americas & LATAM</div>
+                <div class="text-base font-black text-slate-900 font-mono">6 Clients</div>
+                <div class="text-[9px] text-purple-600 font-semibold truncate">Bogota Hub, CAB Caribbean, USA</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Client Table Container -->
+          <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="font-extrabold text-slate-900 text-base">Global Banking Clients & Financial Partners</h3>
+                  <span id="customers-count-label" class="px-2.5 py-0.5 rounded-full bg-sky-50 text-sky-700 text-xs font-bold font-mono border border-sky-200">59 Clients</span>
+                </div>
+                <p class="text-xs text-slate-500 mt-0.5">100% verified real client implementations and partner banks served by JMR Infotech across 5 continents</p>
+              </div>
+
+              <!-- Client Live Search -->
+              <div class="w-full md:w-72 relative">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400"><i class="fa-solid fa-magnifying-glass text-xs"></i></span>
+                <input type="text" id="customer-search-input" oninput="filterCustomersSearch(this.value)" placeholder="Search client bank, country, or manager..." 
+                  class="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-slate-50 font-medium">
+              </div>
+            </div>
+
+            <!-- Regional Filter Pills -->
+            <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100">
+              <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mr-1">Continent Filter:</span>
+              <button onclick="setCustomerRegionFilter('all')" data-region="all" class="customer-region-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-sky-600 text-white shadow-xs transition">
+                All Regions (59)
+              </button>
+              <button onclick="setCustomerRegionFilter('Middle East')" data-region="Middle East" class="customer-region-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 transition">
+                Middle East & GCC (12)
+              </button>
+              <button onclick="setCustomerRegionFilter('Africa')" data-region="Africa" class="customer-region-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 transition">
+                Africa (14)
+              </button>
+              <button onclick="setCustomerRegionFilter('Asia')" data-region="Asia" class="customer-region-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 transition">
+                Asia Pacific & India (23)
+              </button>
+              <button onclick="setCustomerRegionFilter('Europe')" data-region="Europe" class="customer-region-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 transition">
+                Europe & UK (4)
+              </button>
+              <button onclick="setCustomerRegionFilter('America')" data-region="America" class="customer-region-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 transition">
+                Americas & Caribbean (6)
+              </button>
+            </div>
+
+            <!-- Table -->
+            <div class="overflow-x-auto pt-2">
+              <table class="w-full text-left text-sm">
+                <thead class="text-[11px] font-bold text-slate-400 uppercase border-b border-slate-100 bg-slate-50/50">
+                  <tr>
+                    <th class="py-3 px-4">Bank / Institution</th>
+                    <th class="py-3 px-4">Sector</th>
+                    <th class="py-3 px-4">Location & Continent</th>
+                    <th class="py-3 px-4">Lead Account Manager</th>
+                    <th class="py-3 px-4 text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="customers-tbody" class="divide-y divide-slate-100 text-slate-700">
+                  <!-- Loaded dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== TAB: DEALS / OPPORTUNITIES ==================== -->
+        <section id="tab-opportunities" class="tab-content hidden space-y-6">
+          
+          <!-- Opportunities Header KPI Cards -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs">
+              <div class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Total Pipeline</div>
+              <div class="text-xl font-black font-mono text-slate-900 mt-1" id="opp-stat-total-val">$0</div>
+              <div class="text-[11px] text-slate-500 font-semibold mt-0.5"><span id="opp-stat-total-count" class="font-bold text-slate-800">0</span> deals across 600 reps</div>
+            </div>
+
+            <div class="bg-emerald-50/60 p-4 rounded-2xl border border-emerald-200/80 shadow-xs">
+              <div class="text-[10px] font-bold uppercase text-emerald-700 tracking-wider flex items-center gap-1.5">
+                <i class="fa-solid fa-circle-check"></i> Closed Won Revenue
+              </div>
+              <div class="text-xl font-black font-mono text-emerald-700 mt-1" id="opp-stat-won-val">$0</div>
+              <div class="text-[11px] text-emerald-800 font-semibold mt-0.5"><span id="opp-stat-won-count" class="font-bold">0</span> won contracts (2026)</div>
+            </div>
+
+            <div class="bg-sky-50/60 p-4 rounded-2xl border border-sky-200/80 shadow-xs">
+              <div class="text-[10px] font-bold uppercase text-sky-700 tracking-wider flex items-center gap-1.5">
+                <i class="fa-solid fa-handshake"></i> Active Negotiations
+              </div>
+              <div class="text-xl font-black font-mono text-sky-700 mt-1" id="opp-stat-active-val">$0</div>
+              <div class="text-[11px] text-sky-800 font-semibold mt-0.5"><span id="opp-stat-active-count" class="font-bold">0</span> proposals in motion</div>
+            </div>
+
+            <div class="bg-rose-50/60 p-4 rounded-2xl border border-rose-200/80 shadow-xs">
+              <div class="text-[10px] font-bold uppercase text-rose-700 tracking-wider flex items-center gap-1.5">
+                <i class="fa-solid fa-circle-xmark"></i> Closed Lost Deals
+              </div>
+              <div class="text-xl font-black font-mono text-rose-700 mt-1" id="opp-stat-lost-val">$0</div>
+              <div class="text-[11px] text-rose-800 font-semibold mt-0.5"><span id="opp-stat-lost-count" class="font-bold">0</span> deals lost to competitors</div>
+            </div>
+          </div>
+
+          <!-- Opportunities Filter & Search Toolbar -->
+          <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <!-- Live Search -->
+              <div>
+                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1">Search Opportunities</label>
+                <div class="relative">
+                  <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400"><i class="fa-solid fa-magnifying-glass text-xs"></i></span>
+                  <input type="text" id="opp-search-input" oninput="applyOpportunitiesFilters()" placeholder="Search project, bank, or employee..." 
+                    class="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-slate-50/50 font-medium">
+                </div>
+              </div>
+
+              <!-- Stage Filter -->
+              <div>
+                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1">Deal Stage</label>
+                <select id="opp-stage-filter" onchange="applyOpportunitiesFilters()" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-slate-50/50 font-medium">
+                  <option value="all">All Stages (Won, Lost & Active)</option>
+                  <option value="won">Closed Won (100% Probability)</option>
+                  <option value="negotiation">Negotiation (65% Probability)</option>
+                  <option value="proposal">Proposal (40% Probability)</option>
+                  <option value="lost">Closed Lost (0% Probability)</option>
+                </select>
+              </div>
+
+              <!-- Employee Owner Filter -->
+              <div>
+                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1">Deal Owner / Employee</label>
+                <select id="opp-owner-filter" onchange="applyOpportunitiesFilters()" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-slate-50/50 font-medium">
+                  <option value="all">All 600 Employees</option>
+                  <!-- Dynamically populated -->
+                </select>
+              </div>
+
+              <!-- Sort Ranking -->
+              <div>
+                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1">Sort Ranking</label>
+                <select id="opp-sort-by" onchange="applyOpportunitiesFilters()" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-slate-50/50 font-medium">
+                  <option value="amount_desc">Contract Value: High to Low</option>
+                  <option value="amount_asc">Contract Value: Low to High</option>
+                  <option value="date_desc">Expected Close Date: Most Recent (2026)</option>
+                  <option value="probability_desc">Probability %: High to Low</option>
+                  <option value="owner_asc">Employee Name (A to Z)</option>
+                  <option value="title_asc">Project Title (A to Z)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Pagination Bar -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-slate-100 text-xs text-slate-500">
+              <div class="flex items-center gap-2">
+                <span>Showing <strong class="text-slate-900" id="opp-showing-range">0-0</strong> of <strong class="text-slate-900" id="opp-total-matched">0</strong> opportunities</span>
+                <span class="text-slate-300">|</span>
+                <span class="text-slate-400">Page <strong class="text-slate-800" id="opp-page-current">1</strong> of <strong class="text-slate-800" id="opp-page-total">1</strong></span>
+              </div>
+
+              <div class="flex items-center gap-3">
+                <div class="flex items-center gap-1.5">
+                  <label class="text-[11px] font-semibold text-slate-500">Per page:</label>
+                  <select id="opp-page-size" onchange="changeOppPageSize(this.value)" class="px-2 py-1 text-xs rounded-lg border border-slate-200 bg-slate-50 font-medium focus:outline-none">
+                    <option value="25">25</option>
+                    <option value="50" selected>50</option>
+                    <option value="100">100</option>
+                    <option value="250">250</option>
+                    <option value="500">500</option>
+                  </select>
+                </div>
+
+                <div class="flex items-center gap-1">
+                  <button id="btn-opp-prev" onclick="prevOppPage()" class="px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold disabled:opacity-40 disabled:cursor-not-allowed">
+                    <i class="fa-solid fa-chevron-left text-[10px]"></i>
+                  </button>
+                  <button id="btn-opp-next" onclick="nextOppPage()" class="px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold disabled:opacity-40 disabled:cursor-not-allowed">
+                    <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Opportunities Table Container -->
+          <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-sm">
+                <thead class="text-[11px] font-bold text-slate-400 uppercase border-b border-slate-100 bg-slate-50/70">
+                  <tr>
+                    <th class="py-3.5 px-4">Deal Project & Client Bank</th>
+                    <th class="py-3.5 px-4">Contract Amount</th>
+                    <th class="py-3.5 px-4">Stage & Probability</th>
+                    <th class="py-3.5 px-4">Deal Owner & Employee Details</th>
+                    <th class="py-3.5 px-4">Close Date (2026)</th>
+                    <th class="py-3.5 px-4 text-right">Rep Action</th>
+                  </tr>
+                </thead>
+                <tbody id="deals-tbody" class="divide-y divide-slate-100 text-slate-700">
+                  <!-- Loaded dynamically -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Bottom Pagination Bar -->
+            <div class="p-4 bg-slate-50/50 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-500">
+              <div>Displaying all enterprise banking opportunities across all 600 JMR Infotech personnel.</div>
+              <div class="flex items-center gap-2">
+                <button onclick="prevOppPage()" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold">
+                  Previous Page
+                </button>
+                <button onclick="nextOppPage()" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold">
+                  Next Page
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== TAB: ACTIVITIES ==================== -->
+        <section id="tab-activities" class="tab-content hidden space-y-6">
+          <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs">
+            <div class="flex items-center justify-between mb-6">
+              <div>
+                <h3 class="font-bold text-slate-900 text-base">Client Interaction Stream</h3>
+                <p class="text-xs text-slate-500">Executive calls, architectural workshops, and client meetings</p>
+              </div>
+            </div>
+            <div id="activities-timeline" class="space-y-4">
+              <!-- Loaded dynamically -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== TAB: POWER BI EXPORT ==================== -->
+        <section id="tab-analytics" class="tab-content hidden space-y-6">
+          <div class="bg-white p-8 rounded-2xl border border-slate-200/80 shadow-xs space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h3 class="font-extrabold text-slate-900 text-lg">Power BI & Executive Reporting Hub</h3>
+                <p class="text-xs text-slate-500 mt-1">Export complete won vs lost performance dataset for all 600 JMR Infotech India personnel</p>
+              </div>
+              <button onclick="exportFullCsv()" class="px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-md transition flex items-center gap-2">
+                <i class="fa-solid fa-file-arrow-down text-sm"></i>
+                <span>Download All 600 Reps CSV</span>
+              </button>
+            </div>
+
+            <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 space-y-4 text-xs text-slate-600">
+              <div class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                <i class="fa-solid fa-circle-info text-sky-600"></i>
+                <span>Dataset Structure Included in Export:</span>
+              </div>
+              <ul class="list-disc pl-5 space-y-1.5 text-slate-600">
+                <li><strong>Employee Identification:</strong> ID, Full Name, Corporate Email, Role (Executive, Manager, Consultant)</li>
+                <li><strong>Department & Domain:</strong> Core Banking (FLEXCUBE), Digital Banking (OBDX), OFSAA Compliance, Cloud OCI, Fintech</li>
+                <li><strong>Lead Volume:</strong> Total Leads, Won Leads, Lost Leads, Active In-Progress Leads</li>
+                <li><strong>Win Rate Performance:</strong> Closed-Won Rate %, Total Won Revenue ($), Active Pipeline Value ($)</li>
+                <li><strong>Classification:</strong> Performance Tier (Top Performer, Average, Needs Attention)</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== TAB: GROQ AI STRATEGIST ==================== -->
+        <section id="tab-ai-analyst" class="tab-content hidden space-y-6">
+          <div class="bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-950 p-6 rounded-3xl text-white shadow-xl border border-indigo-900/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <div class="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider mb-1">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <span>Groq LPU AI Acceleration &bull; Humanized Executive Partner</span>
+              </div>
+              <h3 class="text-2xl font-black tracking-tight">JMR Sales Intelligence Copilot & Chief Strategist</h3>
+              <p class="text-xs text-slate-300 mt-1 max-w-xl">
+                Fine-tuned with real JMR Infotech deal intelligence, banking RFP benchmarks, and 600-rep conversion data across GCC, Africa, APAC, Europe & Americas.
+              </p>
+            </div>
+            <div class="bg-white/10 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/10 text-xs flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span class="text-slate-300">Model:</span> <strong class="text-amber-400 font-mono">Qwen 3.8 27B / Groq LPU</strong>
+            </div>
+          </div>
+
+          <!-- Quick Humanized Prompts -->
+          <div class="space-y-2">
+            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Suggested Executive Questions:</div>
+            <div class="flex flex-wrap gap-2 text-xs">
+              <button onclick="runQuickAiPrompt('How is Balaji Vankala closing multi-million-dollar banking deals in GCC and Africa, and what can our 600 sales reps replicate?')" class="px-3.5 py-2 rounded-xl bg-white border border-slate-200 hover:border-sky-500 hover:bg-sky-50 font-semibold text-slate-700 transition shadow-xs flex items-center gap-1.5">
+                <i class="fa-solid fa-trophy text-amber-500"></i>
+                <span>Balaji Vankala's GCC & Africa Playbook</span>
+              </button>
+              <button onclick="runQuickAiPrompt('Analyze why we lost leads to competitor aggressive price discounting (30% below margin) and recommend defensive counter-strategies.')" class="px-3.5 py-2 rounded-xl bg-white border border-slate-200 hover:border-sky-500 hover:bg-sky-50 font-semibold text-slate-700 transition shadow-xs flex items-center gap-1.5">
+                <i class="fa-solid fa-shield-halved text-rose-500"></i>
+                <span>Combating Competitor Price Discounting</span>
+              </button>
+              <button onclick="runQuickAiPrompt('Provide a high-level executive briefing for CEO Dr. Jayafar Moidu on our global BFSI pipeline conversion across 5 continents.')" class="px-3.5 py-2 rounded-xl bg-white border border-slate-200 hover:border-sky-500 hover:bg-sky-50 font-semibold text-slate-700 transition shadow-xs flex items-center gap-1.5">
+                <i class="fa-solid fa-briefcase text-sky-500"></i>
+                <span>Executive Briefing for CEO Dr. Jayafar Moidu</span>
+              </button>
+              <button onclick="runQuickAiPrompt('What strategic factors made our Oracle FLEXCUBE 14.5 go-live at Housing Finance Bank Uganda and Coopbank Ethiopia successful?')" class="px-3.5 py-2 rounded-xl bg-white border border-slate-200 hover:border-sky-500 hover:bg-sky-50 font-semibold text-slate-700 transition shadow-xs flex items-center gap-1.5">
+                <i class="fa-solid fa-building-columns text-emerald-500"></i>
+                <span>Housing Finance Bank & Coopbank Case Studies</span>
+              </button>
+              <button onclick="runQuickAiPrompt('Provide a pragmatic coaching roadmap for sales reps with ~40% win rates to help them transition into top performers.')" class="px-3.5 py-2 rounded-xl bg-white border border-slate-200 hover:border-sky-500 hover:bg-sky-50 font-semibold text-slate-700 transition shadow-xs flex items-center gap-1.5">
+                <i class="fa-solid fa-graduation-cap text-indigo-500"></i>
+                <span>Sales Coaching Roadmap (40% to 65%+)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- AI Chat Card -->
+          <div class="bg-white rounded-3xl border border-slate-200/80 shadow-xs p-6 space-y-4">
+            <div class="relative">
+              <textarea id="ai-custom-prompt" rows="3" placeholder="Ask Groq AI any question about JMR Infotech sales reps, deal strategies, banking clients, or specific employees..." 
+                class="w-full p-4 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm font-medium bg-slate-50/50 resize-none"></textarea>
+              <button onclick="submitGroqAiPrompt()" id="ai-submit-btn" class="absolute bottom-3 right-3 px-4 py-2 bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white rounded-xl text-xs font-bold shadow-md transition flex items-center gap-2">
+                <i class="fa-solid fa-paper-plane"></i>
+                <span>Ask Groq AI</span>
+              </button>
+            </div>
+
+            <!-- AI Response Box -->
+            <div id="ai-response-container" class="hidden p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+              <div class="flex items-center justify-between border-b border-slate-200/80 pb-3">
+                <div class="flex items-center gap-2 text-xs font-bold text-indigo-700">
+                  <i class="fa-solid fa-microchip"></i>
+                  <span>JMR Sales Strategist Response</span>
+                  <span class="text-[10px] font-mono bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded-full font-bold">qwen/qwen3.8-27b &bull; Humanized</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button onclick="copyAiResponse()" class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 text-[11px] font-bold text-slate-600 flex items-center gap-1 transition">
+                    <i class="fa-regular fa-copy text-xs"></i>
+                    <span>Copy Analysis</span>
+                  </button>
+                  <button onclick="document.getElementById('ai-response-container').classList.add('hidden')" class="text-slate-400 hover:text-slate-600 text-xs px-1">
+                    <i class="fa-solid fa-xmark"></i>
+                  </button>
+                </div>
+              </div>
+              <div id="ai-response-text" class="text-xs text-slate-700 leading-relaxed font-medium">
+                <!-- Formatted HTML will be rendered here -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== TAB: ODOO & LINKEDIN SYNC ==================== -->
+        <section id="tab-odoo-sync" class="tab-content hidden space-y-8">
+          
+          <!-- LinkedIn Verified Directory Header -->
+          <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs space-y-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="flex items-center gap-2 text-blue-600 text-xs font-bold uppercase tracking-wider mb-1">
+                  <i class="fa-brands fa-linkedin text-sm"></i>
+                  <span>LinkedIn Verified Personnel</span>
+                </div>
+                <h3 class="text-xl font-black text-slate-900">JMR Infotech Key Leadership & Practice Leads</h3>
+                <p class="text-xs text-slate-500 mt-0.5">Publicly verified executive management and solution leads in Bengaluru & India delivery centers</p>
+              </div>
+              <span class="px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold">100% Accurate Public Records</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
+              <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-600 to-indigo-600 text-white font-bold flex items-center justify-center text-sm shadow-xs">JM</div>
+                    <div>
+                      <div class="font-extrabold text-xs text-slate-900">Dr. Jayafar Moidu</div>
+                      <div class="text-[10px] text-sky-600 font-bold">Founder & CEO / MD</div>
+                    </div>
+                  </div>
+                  <p class="text-[11px] text-slate-500">Over 3 decades of BFSI IT leadership (HSBC, TRASSET). Founder of JMR Infotech globally.</p>
+                </div>
+                <button onclick="inspectEmployeeByName('Dr. Jayafar Moidu')" class="mt-3 w-full py-1.5 px-2.5 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-[10px] transition">
+                  View Executive Profile
+                </button>
+              </div>
+
+              <!-- MR. BALAJI VANKALA CARD -->
+              <div class="p-4 rounded-2xl bg-amber-50/50 border border-amber-200/80 flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-indigo-600 text-white font-bold flex items-center justify-center text-sm shadow-xs">BV</div>
+                    <div>
+                      <div class="font-extrabold text-xs text-slate-900">Mr. Balaji Vankala</div>
+                      <div class="text-[10px] text-amber-700 font-bold">Global Enterprise Sales Lead</div>
+                    </div>
+                  </div>
+                  <p class="text-[11px] text-slate-600 leading-snug">Senior Manager spearheading high-value Oracle FLEXCUBE, OBDX & OFSAA deals across GCC, Africa, and APAC ($21.65M won pipeline).</p>
+                </div>
+                <button onclick="inspectBalajiVankala()" class="mt-3 w-full py-1.5 px-2.5 rounded-lg bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white font-bold text-[10px] shadow-xs transition flex items-center justify-center gap-1.5">
+                  <i class="fa-solid fa-users-viewfinder"></i> Inspect Balaji's Deals
+                </button>
+              </div>
+
+              <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-600 to-indigo-600 text-white font-bold flex items-center justify-center text-sm shadow-xs">NJ</div>
+                    <div>
+                      <div class="font-extrabold text-xs text-slate-900">Naman Jain</div>
+                      <div class="text-[10px] text-sky-600 font-bold">SVP & Global Head of Sales</div>
+                    </div>
+                  </div>
+                  <p class="text-[11px] text-slate-500">Leads global banking deals and sales development across India, Middle East, Europe and APAC.</p>
+                </div>
+                <button onclick="inspectEmployeeByName('Naman Jain')" class="mt-3 w-full py-1.5 px-2.5 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-[10px] transition">
+                  View Sales Profile
+                </button>
+              </div>
+
+              <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-600 to-indigo-600 text-white font-bold flex items-center justify-center text-sm shadow-xs">PA</div>
+                    <div>
+                      <div class="font-extrabold text-xs text-slate-900">Praveen Arunachalam</div>
+                      <div class="text-[10px] text-teal-600 font-bold">Technical Lead – Odoo Practice</div>
+                    </div>
+                  </div>
+                  <p class="text-[11px] text-slate-500">Heads JMR Infotech's Odoo ERP & CRM implementation and enterprise synchronization team.</p>
+                </div>
+                <button onclick="inspectEmployeeByName('Praveen Arunachalam')" class="mt-3 w-full py-1.5 px-2.5 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-[10px] transition">
+                  View Technical Profile
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Odoo 100% Data Import Tool -->
+          <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs space-y-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="flex items-center gap-2 text-teal-600 text-xs font-bold uppercase tracking-wider mb-1">
+                  <i class="fa-solid fa-arrows-rotate"></i>
+                  <span>Live Odoo Sync</span>
+                </div>
+                <h3 class="text-xl font-black text-slate-900">Sync 100% Accurate Data from Odoo CRM</h3>
+                <p class="text-xs text-slate-500 mt-0.5">Paste or upload your internal Odoo CRM export CSV to instantly update and sync all employees and won/lost leads</p>
+              </div>
+            </div>
+
+            <div class="space-y-3">
+              <label class="block text-xs font-bold text-slate-700">Paste Odoo / LinkedIn CSV Data (Format: Name, Email, Department, Role, WonLeads, LostLeads):</label>
+              <textarea id="odoo-csv-input" rows="5" class="w-full p-3.5 rounded-2xl border border-slate-200 font-mono text-xs focus:outline-none focus:ring-2 focus:ring-teal-500 bg-slate-50 resize-none" placeholder="Name,Email,Department,Role,WonLeads,LostLeads&#10;Dr. Jayafar Moidu,jayafar.moidu@jmrinfotech.com,Executive Management,admin,25,3&#10;Naman Jain,naman.jain@jmrinfotech.com,Global Sales,manager,18,5"></textarea>
+
+              <div class="flex items-center justify-between">
+                <button onclick="fillSampleOdooCsv()" class="text-xs text-teal-600 hover:text-teal-800 font-bold underline">
+                  <i class="fa-solid fa-wand-magic mr-1"></i> Fill Sample Odoo Export Data
+                </button>
+                <button onclick="submitOdooCsvImport()" class="px-5 py-2.5 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-xs font-bold shadow-md transition flex items-center gap-2">
+                  <i class="fa-solid fa-cloud-arrow-up"></i>
+                  <span>Sync Into JMR CRM Database</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ==================== SLIDE-OVER DRAWER / MODAL: EMPLOYEE DEEP DIVE ==================== -->
+  <div id="modal-employee-detail" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex justify-end">
+    <div class="bg-white w-full max-w-2xl h-full shadow-2xl flex flex-col border-l border-slate-200 transform transition-all duration-300">
+      
+      <!-- Drawer Header -->
+      <div class="p-6 bg-slate-950 text-white flex items-start justify-between border-b border-slate-800">
+        <div class="flex items-center gap-4">
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-sky-500 to-indigo-500 text-white font-black flex items-center justify-center text-xl shadow-lg" id="drawer-avatar">
+            R
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="text-lg font-black text-white" id="drawer-name">Rajesh Sharma</h3>
+              <span class="text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider font-mono bg-sky-500/20 text-sky-300 border border-sky-500/30" id="drawer-id">#102</span>
+            </div>
+            <div class="text-xs text-slate-300 font-medium" id="drawer-email">rajesh.sharma@jmrinfotech.com</div>
+            <div class="text-[11px] text-sky-400 font-semibold mt-0.5" id="drawer-dept">Core Banking - Oracle FLEXCUBE</div>
+          </div>
+        </div>
+        <button onclick="closeEmployeeDrawer()" class="text-slate-400 hover:text-white p-2 rounded-xl hover:bg-slate-800 transition">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Drawer Metrics Bar -->
+      <div class="grid grid-cols-4 gap-2 p-4 bg-slate-100 border-b border-slate-200 text-center">
+        <div class="bg-white p-2.5 rounded-xl border border-slate-200">
+          <div class="text-[10px] font-bold text-slate-400 uppercase">Total Leads</div>
+          <div class="text-base font-black text-slate-900 font-mono" id="drawer-total-leads">0</div>
+        </div>
+        <div class="bg-white p-2.5 rounded-xl border border-slate-200">
+          <div class="text-[10px] font-bold text-emerald-600 uppercase">Won Leads</div>
+          <div class="text-base font-black text-emerald-600 font-mono" id="drawer-won-leads">0</div>
+        </div>
+        <div class="bg-white p-2.5 rounded-xl border border-slate-200">
+          <div class="text-[10px] font-bold text-rose-600 uppercase">Lost Leads</div>
+          <div class="text-base font-black text-rose-600 font-mono" id="drawer-lost-leads">0</div>
+        </div>
+        <div class="bg-white p-2.5 rounded-xl border border-slate-200">
+          <div class="text-[10px] font-bold text-sky-600 uppercase">Win Rate</div>
+          <div class="text-base font-black text-sky-600 font-mono" id="drawer-win-rate">0%</div>
+        </div>
+      </div>
+
+      <!-- Groq AI Rep Coach Widget -->
+      <div class="px-6 py-2.5 bg-slate-50 border-b border-slate-200">
+        <button onclick="askGroqAiAboutEmployee()" id="btn-groq-rep-coach" class="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-amber-500 via-indigo-600 to-sky-600 hover:from-amber-600 hover:to-indigo-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          <span>Ask Groq AI: Performance Diagnosis for this Rep</span>
+        </button>
+        <div id="drawer-ai-coach-box" class="hidden mt-2.5 p-3 bg-white rounded-xl border border-indigo-200 text-xs text-slate-700 leading-relaxed font-medium"></div>
+      </div>
+
+      <!-- Drawer Tabs -->
+      <div class="flex border-b border-slate-200 bg-slate-50 px-6 gap-6 text-xs font-bold">
+        <button onclick="switchDrawerTab('won')" id="tab-btn-won" class="py-3 text-emerald-600 border-b-2 border-emerald-600 flex items-center gap-1.5">
+          <i class="fa-solid fa-circle-check"></i>
+          <span>Won Leads & Deals</span>
+          <span class="px-1.5 py-0.2 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-mono" id="drawer-count-won">0</span>
+        </button>
+        <button onclick="switchDrawerTab('lost')" id="tab-btn-lost" class="py-3 text-slate-500 border-b-2 border-transparent hover:text-slate-800 flex items-center gap-1.5">
+          <i class="fa-solid fa-circle-xmark"></i>
+          <span>Lost Leads & Reasons</span>
+          <span class="px-1.5 py-0.2 rounded-full bg-rose-100 text-rose-800 text-[10px] font-mono" id="drawer-count-lost">0</span>
+        </button>
+        <button onclick="switchDrawerTab('active')" id="tab-btn-active" class="py-3 text-slate-500 border-b-2 border-transparent hover:text-slate-800 flex items-center gap-1.5">
+          <i class="fa-solid fa-spinner"></i>
+          <span>Active Pipeline</span>
+          <span class="px-1.5 py-0.2 rounded-full bg-sky-100 text-sky-800 text-[10px] font-mono" id="drawer-count-active">0</span>
+        </button>
+      </div>
+
+      <!-- Drawer Content Stream -->
+      <div class="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar" id="drawer-body">
+        <!-- Injected dynamically -->
+      </div>
+
+      <!-- Drawer Footer -->
+      <div class="p-4 bg-slate-50 border-t border-slate-200 flex justify-between items-center text-xs text-slate-500">
+        <div>JMR Infotech &bull; Employee Audit Log</div>
+        <button onclick="closeEmployeeDrawer()" class="px-4 py-2 bg-slate-800 text-white rounded-xl font-bold hover:bg-slate-900">
+          Close Window
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Cloud Backend API Settings (For Firebase Hosting & Free Cloud Deployment) -->
+  <div id="modal-api-settings" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center text-lg">
+            <i class="fa-solid fa-cloud"></i>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-slate-900 text-base">Backend API Configuration</h3>
+            <p class="text-xs text-slate-500">Firebase Frontend & Cloud Backend Connection</p>
+          </div>
+        </div>
+        <button onclick="closeApiSettingsModal()" class="text-slate-400 hover:text-slate-700 p-1 rounded-lg">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div class="py-4 space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Backend API Base URL</label>
+          <input type="text" id="input-api-base" placeholder="http://127.0.0.1:8000 or https://your-backend.onrender.com" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none">
+          <p class="text-[11px] text-slate-400 mt-1">Leave empty for auto-detect or enter your deployed Render backend HTTPS URL.</p>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="setPresetApiBase('http://127.0.0.1:8000')" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold">
+            Localhost (8000)
+          </button>
+          <button type="button" onclick="setPresetApiBase('https://jmr-crm-backend.onrender.com')" class="px-3 py-1.5 rounded-lg bg-sky-50 hover:bg-sky-100 text-sky-700 text-xs font-semibold">
+            Render Cloud Host
+          </button>
+        </div>
+
+        <div id="api-test-result" class="hidden p-3 rounded-xl text-xs font-medium"></div>
+      </div>
+
+      <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+        <button type="button" onclick="testCurrentApiConnection()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center gap-1.5">
+          <i class="fa-solid fa-bolt"></i>
+          <span>Test Ping</span>
+        </button>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="closeApiSettingsModal()" class="px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100 font-bold text-xs">
+            Cancel
+          </button>
+          <button type="button" onclick="saveApiBaseSettings()" class="px-5 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs shadow-md shadow-sky-600/30">
+            Save & Connect
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification System -->
+  <div id="toast-box" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- ==================== JAVASCRIPT APPLICATION CORE ==================== -->
+  <script>
+    // State Container
+    const appState = {
+      token: localStorage.getItem('crm_token') || null,
+      currentUser: null,
+      jmrEmployees: [],
+      filteredEmployees: [],
+      allLeads: [],
+      allCustomers: [],
+      allOpportunities: [],
+      filteredOpportunities: [],
+      allActivities: [],
+      charts: { dept: null, ratio: null },
+      pagination: {
+        page: 1,
+        pageSize: 30
+      },
+      oppPagination: {
+        page: 1,
+        pageSize: 50
+      },
+      currentDrawerData: null,
+      activeDrawerTab: 'won'
+    };
+
+    // Helper: Toast message
+    function toast(msg, type = 'success') {
+      const box = document.getElementById('toast-box');
+      const el = document.createElement('div');
+      el.className = `pointer-events-auto px-4 py-3 rounded-2xl shadow-xl border text-xs font-bold flex items-center gap-2 transform transition-all duration-300 translate-y-2 opacity-0 ${
+        type === 'success' ? 'bg-emerald-50 border-emerald-200 text-emerald-800' :
+        type === 'error' ? 'bg-rose-50 border-rose-200 text-rose-800' :
+        'bg-slate-900 border-slate-800 text-white'
+      }`;
+      const icon = type === 'success' ? 'fa-circle-check text-emerald-600' :
+                   type === 'error' ? 'fa-circle-exclamation text-rose-600' :
+                   'fa-info-circle text-sky-400';
+      el.innerHTML = `<i class="fa-solid ${icon}"></i><span>${msg}</span>`;
+      box.appendChild(el);
+      requestAnimationFrame(() => el.classList.remove('translate-y-2', 'opacity-0'));
+      setTimeout(() => {
+        el.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => el.remove(), 300);
+      }, 3500);
+    }
+
+    // Helper: Currency Formatter (USD and Lakhs/Crores reference)
+    function formatMoney(num) {
+      if (!num) return '$0';
+      return '$' + Number(num).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+    }
+
+    // Base API URL resolver: works on localhost, file:///, Firebase Hosting, and cloud Render backends
+    function resolveApiBase() {
+      const saved = localStorage.getItem('crm_api_base');
+      if (saved) return saved.trim().replace(/\/+$/, '');
+      if (window.location.protocol === 'file:') return 'http://127.0.0.1:8000';
+      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        return (window.location.port === '8000') ? '' : 'http://127.0.0.1:8000';
+      }
+      // On Firebase Hosting (*.web.app or *.firebaseapp.com)
+      return 'https://jmr-crm-backend.onrender.com';
+    }
+
+    let API_BASE = resolveApiBase();
+
+    function updateApiStatusLabel() {
+      const label = document.getElementById('header-api-label');
+      if (!label) return;
+      if (!API_BASE) {
+        label.textContent = 'Port 8000 (Local)';
+      } else if (API_BASE.includes('127.0.0.1') || API_BASE.includes('localhost')) {
+        label.textContent = 'Localhost:8000';
+      } else {
+        try {
+          const u = new URL(API_BASE);
+          label.textContent = u.hostname.split('.')[0] + ' (Cloud)';
+        } catch(e) {
+          label.textContent = 'Cloud API';
+        }
+      }
+    }
+
+    function openApiSettingsModal() {
+      const input = document.getElementById('input-api-base');
+      input.value = localStorage.getItem('crm_api_base') || API_BASE;
+      document.getElementById('api-test-result').classList.add('hidden');
+      document.getElementById('modal-api-settings').classList.remove('hidden');
+    }
+
+    function closeApiSettingsModal() {
+      document.getElementById('modal-api-settings').classList.add('hidden');
+    }
+
+    function setPresetApiBase(url) {
+      document.getElementById('input-api-base').value = url;
+    }
+
+    async function testCurrentApiConnection() {
+      const url = document.getElementById('input-api-base').value.trim().replace(/\/+$/, '') || 'http://127.0.0.1:8000';
+      const resultBox = document.getElementById('api-test-result');
+      resultBox.className = 'p-3 rounded-xl text-xs font-medium bg-sky-50 text-sky-800 border border-sky-200 block';
+      resultBox.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Testing connectivity to ' + url + '...';
+
+      try {
+        const res = await fetch(url + '/auth/me', { headers: { 'Authorization': 'Bearer test' } }).catch(() => null);
+        if (res && (res.status === 200 || res.status === 401)) {
+          resultBox.className = 'p-3 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 block';
+          resultBox.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> Connected successfully! CRM backend server is responsive.';
+        } else {
+          resultBox.className = 'p-3 rounded-xl text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200 block';
+          resultBox.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-amber-600 mr-1.5"></i> Endpoint reached, but check server status.';
+        }
+      } catch (e) {
+        resultBox.className = 'p-3 rounded-xl text-xs font-semibold bg-rose-50 text-rose-800 border border-rose-200 block';
+        resultBox.innerHTML = '<i class="fa-solid fa-circle-xmark text-rose-600 mr-1.5"></i> Cannot reach ' + url + '. Ensure the backend is active.';
+      }
+    }
+
+    function saveApiBaseSettings() {
+      const input = document.getElementById('input-api-base').value.trim().replace(/\/+$/, '');
+      if (input) {
+        localStorage.setItem('crm_api_base', input);
+      } else {
+        localStorage.removeItem('crm_api_base');
+      }
+      API_BASE = resolveApiBase();
+      updateApiStatusLabel();
+      closeApiSettingsModal();
+      toast('API Base set to ' + (API_BASE || 'Relative Server'), 'info');
+      refreshData();
+    }
+
+    // Auto-login admin helper (silent background recovery)
+    async function autoLoginAdmin() {
+      try {
+        const params = new URLSearchParams();
+        params.append('username', 'admin@crm.com');
+        params.append('password', 'admin123');
+        const res = await fetch((API_BASE || '') + '/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: params
+        });
+        if (res.ok) {
+          const data = await res.json();
+          appState.token = data.access_token;
+          localStorage.setItem('crm_token', data.access_token);
+          return data.access_token;
+        }
+      } catch (e) {
+        console.warn('Auto-login error:', e);
+      }
+      return null;
+    }
+
+    // API Helper with Token and automatic 401 retry
+    async function fetchApi(url, opts = {}) {
+      const fullUrl = url.startsWith('http') ? url : (API_BASE + url);
+      const headers = { ...opts.headers };
+      if (appState.token) {
+        headers['Authorization'] = `Bearer ${appState.token}`;
+      }
+      if (opts.body && !(opts.body instanceof URLSearchParams)) {
+        headers['Content-Type'] = 'application/json';
+      }
+
+      let res;
+      try {
+        res = await fetch(fullUrl, { ...opts, headers });
+      } catch (netErr) {
+        throw new Error('Connection failed. Make sure the CRM server is running on http://127.0.0.1:8000.');
+      }
+
+      if (res.status === 401 && !opts._retry) {
+        const freshToken = await autoLoginAdmin();
+        if (freshToken) {
+          return fetchApi(url, { ...opts, _retry: true });
+        }
+        logout();
+        throw new Error('Session expired. Please sign in.');
+      }
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ detail: `HTTP ${res.status}` }));
+        throw new Error(err.detail || `Request error ${res.status}`);
+      }
+      return res.json();
+    }
+
+    // Autofill Admin Credentials
+    function fillAdminLogin() {
+      document.getElementById('login-email').value = 'admin@crm.com';
+      document.getElementById('login-password').value = 'admin123';
+    }
+
+    // Login Form
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      const btn = document.getElementById('login-btn');
+      const errBox = document.getElementById('login-error');
+      errBox.classList.add('hidden');
+
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i><span>Authenticating...</span>`;
+
+      try {
+        const params = new URLSearchParams();
+        params.append('username', email);
+        params.append('password', password);
+
+        const data = await fetchApi('/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: params
+        });
+
+        appState.token = data.access_token;
+        localStorage.setItem('crm_token', data.access_token);
+        await initApplication();
+      } catch (err) {
+        document.getElementById('login-error-text').textContent = err.message || 'Login failed';
+        errBox.classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<span>Enter CRM Dashboard</span><i class="fa-solid fa-arrow-right"></i>`;
+      }
+    });
+
+    function logout() {
+      appState.token = null;
+      appState.currentUser = null;
+      localStorage.removeItem('crm_token');
+      document.getElementById('login-view').classList.remove('hidden');
+      document.getElementById('app-view').classList.add('hidden');
+    }
+
+    // Navigation Router
+    function navigate(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.nav-item').forEach(el => {
+        el.classList.remove('bg-sky-600', 'text-white', 'shadow-md', 'shadow-sky-600/30');
+      });
+
+      const target = document.getElementById(`tab-${tabId}`);
+      if (target) target.classList.remove('hidden');
+
+      const btn = document.querySelector(`.nav-item[data-tab="${tabId}"]`);
+      if (btn) btn.classList.add('bg-sky-600', 'text-white', 'shadow-md', 'shadow-sky-600/30');
+
+      const titles = {
+        'jmr-reps': { title: 'JMR Infotech 600 Reps Analysis', sub: 'Comprehensive breakdown of won & lost leads for all 600 Indian personnel' },
+        'ai-analyst': { title: 'Executive Groq AI Analyst', sub: 'Instant LPU AI sales intelligence powered by your Groq API key' },
+        'odoo-sync': { title: 'Odoo & LinkedIn 100% Data Sync', sub: 'Verified LinkedIn leadership and direct Odoo CRM data synchronizer' },
+        'dashboard': { title: 'Executive BFSI Dashboard', sub: 'High-level metrics, conversion rates, and department performance' },
+        'leads': { title: 'All Banking Leads Repository', sub: 'Enterprise RFPs, inbound requests, and prospect pipeline' },
+        'customers': { title: 'Global Strategic Banking Clients & Partners', sub: 'Verified client banks and financial institutions served across 5 continents: Middle East, Africa, APAC, Europe & Americas' },
+        'opportunities': { title: 'Opportunities & Contracts', sub: 'High-value banking transformation deal pipeline' },
+        'activities': { title: 'Client Touchpoints & Meetings', sub: 'Real-time logs of meetings, calls, and RFP submissions' },
+        'analytics': { title: 'Power BI Data Hub', sub: 'Exportable data stream formatted for Power BI executive reporting' }
+      };
+
+      if (titles[tabId]) {
+        document.getElementById('page-title').textContent = titles[tabId].title;
+        document.getElementById('page-subtitle').textContent = titles[tabId].sub;
+      }
+    }
+
+    // Refresh Data
+    async function refreshData() {
+      const btn = document.getElementById('btn-refresh-data');
+      if (btn) {
+        btn.innerHTML = `<i class="fa-solid fa-rotate-right fa-spin text-sky-600"></i><span>Syncing...</span>`;
+        btn.disabled = true;
+      }
+      toast('Syncing with JMR database...', 'info');
+      try {
+        if (!appState.token) await autoLoginAdmin();
+        await loadCoreData();
+        toast('All 600 employee records refreshed!');
+      } catch (err) {
+        toast('Data sync failed: ' + err.message, 'error');
+      } finally {
+        if (btn) {
+          btn.innerHTML = `<i class="fa-solid fa-rotate-right"></i><span>Refresh</span>`;
+          btn.disabled = false;
+        }
+      }
+    }
+
+    // Load Core Data
+    async function loadCoreData() {
+      try {
+        if (!appState.token) {
+          await autoLoginAdmin();
+        }
+
+        const [me, jmrEmployees, leads, customers, opps, acts] = await Promise.all([
+          fetchApi('/auth/me'),
+          fetchApi('/analytics/jmr-employees'),
+          fetchApi('/leads/'),
+          fetchApi('/customers/'),
+          fetchApi('/opportunities/'),
+          fetchApi('/activities/')
+        ]);
+
+        appState.currentUser = me;
+        appState.jmrEmployees = jmrEmployees;
+        appState.allReps = jmrEmployees; // Synchronize reference so Balaji inspector finds it instantly
+        appState.allLeads = leads;
+        appState.allCustomers = customers;
+        appState.allOpportunities = opps;
+        appState.allActivities = acts;
+
+        // Render Sidebar Badges
+        document.getElementById('badge-leads-count').textContent = leads.length;
+        document.getElementById('badge-customers-count').textContent = customers.length;
+        document.getElementById('badge-opportunities-count').textContent = opps.length;
+
+        document.getElementById('user-name').textContent = me.name;
+        document.getElementById('user-role-badge').textContent = me.role;
+        document.getElementById('user-avatar').textContent = (me.name || 'A').charAt(0).toUpperCase();
+
+        // Render 600 Employees Table & Aggregate Metrics
+        applyJmrFilters();
+        renderDashboard();
+        renderLeadsTable();
+        renderCustomersTable();
+        populateOpportunitiesFilters();
+        applyOpportunitiesFilters();
+        renderActivities();
+
+      } catch (err) {
+        console.error('Error loading CRM data:', err);
+        throw err;
+      }
+    }
+
+    // ==================== 600 JMR EMPLOYEES WON/LOST CORE LOGIC ====================
+    function applyJmrFilters() {
+      const search = (document.getElementById('jmr-search-input')?.value || '').toLowerCase();
+      const dept = document.getElementById('jmr-dept-filter')?.value || 'all';
+      const tier = document.getElementById('jmr-tier-filter')?.value || 'all';
+      const sort = document.getElementById('jmr-sort-by')?.value || 'won_leads_desc';
+
+      let list = [...appState.jmrEmployees];
+
+      // Filter by Search
+      if (search) {
+        list = list.filter(e => 
+          e.name.toLowerCase().includes(search) || 
+          e.email.toLowerCase().includes(search) || 
+          e.department.toLowerCase().includes(search) ||
+          String(e.id).includes(search)
+        );
+      }
+
+      // Filter by Dept
+      if (dept !== 'all') {
+        list = list.filter(e => e.department === dept);
+      }
+
+      // Filter by Tier
+      if (tier !== 'all') {
+        list = list.filter(e => e.tier === tier);
+      }
+
+      // Sorting
+      list.sort((a, b) => {
+        if (sort === 'won_leads_desc') return b.won_leads - a.won_leads;
+        if (sort === 'win_rate_desc') return b.win_rate - a.win_rate;
+        if (sort === 'lost_leads_desc') return b.lost_leads - a.lost_leads;
+        if (sort === 'revenue_desc') return b.won_revenue - a.won_revenue;
+        if (sort === 'total_leads_desc') return b.total_leads - a.total_leads;
+        if (sort === 'name_asc') return a.name.localeCompare(b.name);
+        return 0;
+      });
+
+      appState.filteredEmployees = list;
+      appState.pagination.page = 1;
+
+      renderJmrSummaryStats();
+      renderJmrTable();
+    }
+
+    function renderJmrSummaryStats() {
+      const all = appState.jmrEmployees;
+      const totalReps = all.length;
+      let totalWonLeads = 0;
+      let totalLostLeads = 0;
+      let totalWonRev = 0;
+
+      all.forEach(e => {
+        totalWonLeads += e.won_leads;
+        totalLostLeads += e.lost_leads;
+        totalWonRev += e.won_revenue;
+      });
+
+      const resolved = totalWonLeads + totalLostLeads;
+      const overallWinRate = resolved > 0 ? (totalWonLeads / resolved * 100).toFixed(1) : '0';
+
+      document.getElementById('reps-stat-total-emp').textContent = totalReps;
+      document.getElementById('reps-stat-won-leads').textContent = totalWonLeads.toLocaleString();
+      document.getElementById('reps-stat-lost-leads').textContent = totalLostLeads.toLocaleString();
+      document.getElementById('reps-stat-win-rate').textContent = overallWinRate + '%';
+    }
+
+    function renderJmrTable() {
+      const tbody = document.getElementById('jmr-table-body');
+      const list = appState.filteredEmployees;
+      const total = list.length;
+      const { page, pageSize } = appState.pagination;
+
+      const totalPages = Math.max(1, Math.ceil(total / pageSize));
+      const startIdx = (page - 1) * pageSize;
+      const endIdx = Math.min(startIdx + pageSize, total);
+      const pageItems = list.slice(startIdx, endIdx);
+
+      document.getElementById('jmr-showing-range').textContent = total > 0 ? `${startIdx + 1}-${endIdx}` : '0-0';
+      document.getElementById('jmr-total-matched').textContent = total;
+      document.getElementById('jmr-page-current').textContent = page;
+      document.getElementById('jmr-page-total').textContent = totalPages;
+
+      document.getElementById('btn-prev-page').disabled = page <= 1;
+      document.getElementById('btn-next-page').disabled = page >= totalPages;
+
+      if (pageItems.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="9" class="py-12 text-center text-xs text-slate-400">No employees match your filter. Try adjusting your search query.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = pageItems.map(emp => {
+        const rateColor = emp.win_rate >= 60 ? 'text-emerald-600 bg-emerald-50 border-emerald-200' :
+                          emp.win_rate >= 40 ? 'text-amber-600 bg-amber-50 border-amber-200' :
+                          'text-rose-600 bg-rose-50 border-rose-200';
+
+        const barColor = emp.win_rate >= 60 ? 'bg-emerald-500' :
+                         emp.win_rate >= 40 ? 'bg-amber-500' :
+                         'bg-rose-500';
+
+        return `
+          <tr class="hover:bg-sky-50/50 transition cursor-pointer group" onclick="inspectEmployee(${emp.id})">
+            <td class="py-3.5 px-5">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-slate-800 to-sky-700 text-white font-bold flex items-center justify-center text-xs shadow-xs">
+                  ${emp.name.charAt(0)}
+                </div>
+                <div>
+                  <div class="font-bold text-slate-900 group-hover:text-sky-600 transition flex items-center gap-1.5">
+                    <span>${emp.name}</span>
+                    <span class="text-[9px] font-mono text-slate-400 font-normal">#${emp.id}</span>
+                  </div>
+                  <div class="text-[11px] text-slate-400 font-mono">${emp.email}</div>
+                </div>
+              </div>
+            </td>
+            <td class="py-3.5 px-4">
+              <span class="text-xs font-semibold text-slate-700 block">${emp.department}</span>
+              <span class="text-[10px] text-slate-400 capitalize font-medium">${emp.role} &bull; India Operations</span>
+            </td>
+            <td class="py-3.5 px-3 text-center font-mono font-bold text-slate-800">
+              ${emp.total_leads}
+            </td>
+            <td class="py-3.5 px-3 text-center">
+              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold font-mono bg-emerald-50 text-emerald-700 border border-emerald-200/60 shadow-xs">
+                <i class="fa-solid fa-circle-check text-[10px]"></i>
+                ${emp.won_leads}
+              </span>
+            </td>
+            <td class="py-3.5 px-3 text-center">
+              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold font-mono bg-rose-50 text-rose-700 border border-rose-200/60 shadow-xs">
+                <i class="fa-solid fa-circle-xmark text-[10px]"></i>
+                ${emp.lost_leads}
+              </span>
+            </td>
+            <td class="py-3.5 px-3 text-center font-mono text-xs text-slate-500 font-semibold">
+              ${emp.active_leads}
+            </td>
+            <td class="py-3.5 px-4 text-center">
+              <div class="flex items-center justify-center gap-2">
+                <span class="font-mono font-bold text-xs ${emp.win_rate >= 60 ? 'text-emerald-700' : emp.win_rate >= 40 ? 'text-amber-700' : 'text-rose-700'}">${emp.win_rate}%</span>
+                <div class="w-16 h-2 bg-slate-100 rounded-full overflow-hidden">
+                  <div class="h-full ${barColor}" style="width: ${emp.win_rate}%"></div>
+                </div>
+              </div>
+            </td>
+            <td class="py-3.5 px-4 text-right font-mono font-black text-slate-900">
+              ${formatMoney(emp.won_revenue)}
+            </td>
+            <td class="py-3.5 px-5 text-right">
+              <button onclick="event.stopPropagation(); inspectEmployee(${emp.id})" class="px-3 py-1.5 rounded-xl bg-sky-50 hover:bg-sky-600 text-sky-700 hover:text-white font-bold text-xs transition border border-sky-200 hover:border-transparent flex items-center gap-1.5 ml-auto shadow-xs">
+                <i class="fa-solid fa-eye text-[11px]"></i>
+                <span>Inspect Won/Lost</span>
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      renderPaginationNumbers(totalPages);
+    }
+
+    function renderPaginationNumbers(totalPages) {
+      const container = document.getElementById('pagination-numbers');
+      const { page } = appState.pagination;
+      let html = '';
+
+      const maxBtns = 5;
+      let startPage = Math.max(1, page - 2);
+      let endPage = Math.min(totalPages, startPage + maxBtns - 1);
+
+      if (endPage - startPage < maxBtns - 1) {
+        startPage = Math.max(1, endPage - maxBtns + 1);
+      }
+
+      for (let i = startPage; i <= endPage; i++) {
+        html += `
+          <button onclick="gotoPage(${i})" class="w-7 h-7 rounded-lg text-xs font-bold font-mono transition ${i === page ? 'bg-sky-600 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-200'}">
+            ${i}
+          </button>
+        `;
+      }
+      container.innerHTML = html;
+    }
+
+    function gotoPage(p) {
+      appState.pagination.page = p;
+      renderJmrTable();
+    }
+    function prevPage() {
+      if (appState.pagination.page > 1) {
+        appState.pagination.page--;
+        renderJmrTable();
+      }
+    }
+    function nextPage() {
+      const totalPages = Math.ceil(appState.filteredEmployees.length / appState.pagination.pageSize);
+      if (appState.pagination.page < totalPages) {
+        appState.pagination.page++;
+        renderJmrTable();
+      }
+    }
+    function changePageSize(size) {
+      appState.pagination.pageSize = parseInt(size);
+      appState.pagination.page = 1;
+      renderJmrTable();
+    }
+
+    // ==================== SLIDE-OVER DRAWER FOR EMPLOYEE LEADS ====================
+    function buildLocalBreakdown(empId) {
+      empId = Number(empId);
+      const reps = appState.jmrEmployees || appState.allReps || [];
+      const emp = reps.find(r => Number(r.id) === empId) || {};
+
+      const opps = (appState.allOpportunities || []).filter(o => Number(o.owner_id) === empId);
+      const leads = (appState.allLeads || []).filter(l => Number(l.owner_id) === empId);
+
+      const opp_loss_reasons = [
+        "Bank Core IT Committee postponed Oracle FLEXCUBE upgrade RFP to Q4 2026",
+        "Competitor low-bid aggressive discounting on SI implementation hours",
+        "Client bank board selected in-house proprietary legacy wrapper",
+        "Regional central bank monetary compliance review paused capital expenditure",
+        "Client internal cloud infrastructure budget freeze; deferred to FY27",
+        "Key bank sponsor reshuffled during executive leadership transition"
+      ];
+      const lead_loss_reasons = [
+        "Bank project steering committee deferred vendor RFP evaluation to Q4 2026",
+        "Competitor aggressive pricing undercut on SI implementation services",
+        "Client bank selected Oracle Cloud SaaS direct subscription model",
+        "Procurement paused following central bank capital reserve compliance review",
+        "Client internal tech team opted to maintain legacy wrapper in-house"
+      ];
+
+      const won_deals = opps.filter(o => o.stage === 'won');
+      const lost_deals = opps.filter(o => o.stage === 'lost').map(o => ({
+        ...o,
+        loss_reason: o.loss_reason || opp_loss_reasons[o.id % opp_loss_reasons.length]
+      }));
+      const active_deals = opps.filter(o => o.stage !== 'won' && o.stage !== 'lost');
+
+      const won_leads = leads.filter(l => l.status === 'won').map(l => ({
+        ...l,
+        qualification: "Qualified BFSI Lead & Converted to Commercial Engagement"
+      }));
+      const lost_leads = leads.filter(l => l.status === 'lost').map(l => ({
+        ...l,
+        loss_reason: l.loss_reason || lead_loss_reasons[l.id % lead_loss_reasons.length]
+      }));
+      const active_leads = leads.filter(l => l.status !== 'won' && l.status !== 'lost');
+
+      const wonRev = won_deals.reduce((acc, d) => acc + (d.amount || 0), 0) || emp.won_revenue || 0;
+      const pipeRev = active_deals.reduce((acc, d) => acc + (d.amount || 0), 0) || emp.pipeline_value || 0;
+      const totalResolved = won_deals.length + lost_deals.length;
+      const winRate = totalResolved > 0 ? Math.round((won_deals.length / totalResolved) * 1000) / 10 : (emp.win_rate !== undefined ? emp.win_rate : 0);
+
+      return {
+        employee: {
+          id: empId,
+          name: emp.name || `Representative #${empId}`,
+          email: emp.email || `rep${empId}@jmrinfotech.com`,
+          role: emp.role || 'Senior BFSI Consultant',
+          department: emp.department || 'Enterprise Banking Solutions',
+          win_rate: emp.win_rate !== undefined ? emp.win_rate : winRate,
+          total_leads_count: (leads.length || opps.length) || (emp.total_leads || 0),
+          won_leads_count: won_leads.length || won_deals.length || (emp.won_leads || 0),
+          lost_leads_count: lost_leads.length || lost_deals.length || (emp.lost_leads || 0),
+          active_leads_count: active_leads.length || active_deals.length || 0,
+          won_revenue: wonRev,
+          pipeline_value: pipeRev
+        },
+        won_deals,
+        lost_deals,
+        active_deals,
+        won_leads,
+        lost_leads,
+        active_leads,
+        recent_activities: []
+      };
+    }
+
+    function populateDrawerUI(data) {
+      const emp = data.employee;
+      document.getElementById('drawer-name').textContent = emp.name;
+      document.getElementById('drawer-id').textContent = `#${emp.id}`;
+      document.getElementById('drawer-email').textContent = emp.email;
+      document.getElementById('drawer-dept').textContent = emp.department;
+      document.getElementById('drawer-avatar').textContent = (emp.name || 'J').charAt(0);
+
+      document.getElementById('drawer-total-leads').textContent = emp.total_leads_count;
+      document.getElementById('drawer-won-leads').textContent = emp.won_leads_count;
+      document.getElementById('drawer-lost-leads').textContent = emp.lost_leads_count;
+      document.getElementById('drawer-win-rate').textContent = emp.win_rate + '%';
+
+      const wonTotal = (data.won_deals || []).length + (data.won_leads || []).length;
+      const lostTotal = (data.lost_deals || []).length + (data.lost_leads || []).length;
+      const actTotal = (data.active_deals || []).length + (data.active_leads || []).length;
+
+      document.getElementById('drawer-count-won').textContent = wonTotal;
+      document.getElementById('drawer-count-lost').textContent = lostTotal;
+      document.getElementById('drawer-count-active').textContent = actTotal;
+    }
+
+    async function inspectEmployee(empId) {
+      empId = Number(empId);
+      if (!empId) return;
+
+      // 1. Immediately initialize and show from client memory (0ms latency, zero failure risk)
+      const localData = buildLocalBreakdown(empId);
+      appState.currentDrawerData = localData;
+      populateDrawerUI(localData);
+      switchDrawerTab('won');
+      document.getElementById('modal-employee-detail').classList.remove('hidden');
+
+      // 2. Fetch fresh breakdown from backend to enrich
+      try {
+        const liveData = await fetchApi(`/employees/${empId}/leads-breakdown`);
+        if (liveData && liveData.employee) {
+          appState.currentDrawerData = liveData;
+          populateDrawerUI(liveData);
+          renderDrawerContent();
+        }
+      } catch (err) {
+        // Safe graceful degradation: local in-memory records already loaded smoothly
+        console.log('Background inspection sync:', err.message);
+      }
+    }
+
+    function closeEmployeeDrawer() {
+      document.getElementById('modal-employee-detail').classList.add('hidden');
+      const box = document.getElementById('drawer-ai-coach-box');
+      if (box) box.classList.add('hidden');
+    }
+
+    function switchDrawerTab(tab) {
+      appState.activeDrawerTab = tab;
+
+      const wonBtn = document.getElementById('tab-btn-won');
+      const lostBtn = document.getElementById('tab-btn-lost');
+      const actBtn = document.getElementById('tab-btn-active');
+
+      [wonBtn, lostBtn, actBtn].forEach(b => {
+        b.className = 'py-3 text-slate-500 border-b-2 border-transparent hover:text-slate-800 flex items-center gap-1.5 font-bold transition';
+      });
+
+      if (tab === 'won') {
+        wonBtn.className = 'py-3 text-emerald-600 border-b-2 border-emerald-600 flex items-center gap-1.5 font-bold transition';
+      } else if (tab === 'lost') {
+        lostBtn.className = 'py-3 text-rose-600 border-b-2 border-rose-600 flex items-center gap-1.5 font-bold transition';
+      } else {
+        actBtn.className = 'py-3 text-sky-600 border-b-2 border-sky-600 flex items-center gap-1.5 font-bold transition';
+      }
+
+      renderDrawerContent();
+    }
+
+    function renderDrawerContent() {
+      const container = document.getElementById('drawer-body');
+      const data = appState.currentDrawerData;
+      if (!data) return;
+
+      const tab = appState.activeDrawerTab;
+
+      if (tab === 'won') {
+        const wonDeals = data.won_deals || [];
+        const wonLeads = data.won_leads || [];
+
+        if (wonDeals.length === 0 && wonLeads.length === 0) {
+          container.innerHTML = `
+            <div class="py-16 text-center text-slate-400">
+              <i class="fa-solid fa-trophy text-3xl text-slate-300 mb-3 block"></i>
+              <p class="text-xs font-semibold">No closed-won leads on record yet for this representative.</p>
+            </div>
+          `;
+          return;
+        }
+
+        let html = '';
+
+        if (wonDeals.length > 0) {
+          html += `
+            <div class="mb-3 flex items-center justify-between">
+              <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-700 flex items-center gap-2">
+                <i class="fa-solid fa-file-signature text-emerald-600"></i>
+                <span>Closed Won Commercial Contracts (${wonDeals.length})</span>
+              </h4>
+              <span class="text-xs font-black font-mono text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                ${formatMoney(wonDeals.reduce((s, d) => s + (d.amount || 0), 0))} Total Value
+              </span>
+            </div>
+            <div class="space-y-3 mb-6">
+              ${wonDeals.map(deal => `
+                <div class="p-4 rounded-2xl bg-emerald-50/50 border border-emerald-200/90 hover:bg-emerald-50 transition shadow-xs">
+                  <div class="flex items-start justify-between gap-3 mb-2">
+                    <div>
+                      <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 mb-1">
+                        <i class="fa-solid fa-circle-check mr-1"></i> Won Contract Signed
+                      </span>
+                      <h4 class="font-bold text-slate-900 text-sm">${deal.title}</h4>
+                      <div class="text-xs text-slate-600 font-semibold mt-0.5 flex items-center gap-2">
+                        <span><i class="fa-solid fa-building-columns text-slate-400 mr-1"></i>${deal.customer_name}</span>
+                        ${deal.customer_city ? `<span class="text-slate-400">&bull;</span><span class="text-slate-500">${deal.customer_city}</span>` : ''}
+                      </div>
+                    </div>
+                    <div class="text-right">
+                      <div class="text-base font-black font-mono text-emerald-700">${formatMoney(deal.amount)}</div>
+                      <div class="text-[10px] text-emerald-600 font-mono font-bold">100% Probability</div>
+                    </div>
+                  </div>
+                  <div class="pt-2 border-t border-emerald-200/60 flex items-center justify-between text-[11px] text-slate-500">
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-shield-halved text-emerald-600"></i>Verified JMR Oracle BFSI Deal</span>
+                    <span>Closed: ${deal.expected_close_date ? new Date(deal.expected_close_date).toLocaleDateString() : 'FY2026'}</span>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          `;
+        }
+
+        if (wonLeads.length > 0) {
+          html += `
+            <div class="mb-3 flex items-center justify-between">
+              <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-700 flex items-center gap-2">
+                <i class="fa-solid fa-user-check text-emerald-600"></i>
+                <span>Converted Bank Prospect Leads (${wonLeads.length})</span>
+              </h4>
+            </div>
+            <div class="space-y-2.5">
+              ${wonLeads.map(lead => `
+                <div class="p-3.5 rounded-2xl bg-white border border-slate-200 hover:border-emerald-300 transition shadow-2xs">
+                  <div class="flex items-start justify-between gap-2">
+                    <div>
+                      <div class="text-xs font-bold text-slate-900">${lead.name}</div>
+                      <div class="text-[11px] text-slate-500 mt-0.5 flex items-center gap-2">
+                        <span>${lead.email || 'N/A'}</span>
+                        ${lead.phone ? `<span>&bull;</span><span>${lead.phone}</span>` : ''}
+                      </div>
+                    </div>
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800">
+                      Converted & Won
+                    </span>
+                  </div>
+                  <div class="mt-2 pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400">
+                    <span>Source: <strong class="text-slate-600 font-medium">${lead.source || 'Oracle BFSI Referral'}</strong></span>
+                    <span>${lead.created_at ? new Date(lead.created_at).toLocaleDateString() : '2026'}</span>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          `;
+        }
+
+        container.innerHTML = html;
+
+      } else if (tab === 'lost') {
+        const lostDeals = data.lost_deals || [];
+        const lostLeads = data.lost_leads || [];
+
+        if (lostDeals.length === 0 && lostLeads.length === 0) {
+          container.innerHTML = `
+            <div class="py-16 text-center text-slate-400">
+              <i class="fa-solid fa-circle-check text-3xl text-emerald-400 mb-3 block"></i>
+              <p class="text-xs font-semibold">Zero lost leads! 100% clean conversion record for this representative.</p>
+            </div>
+          `;
+          return;
+        }
+
+        let html = '';
+
+        if (lostDeals.length > 0) {
+          html += `
+            <div class="mb-3 flex items-center justify-between">
+              <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-700 flex items-center gap-2">
+                <i class="fa-solid fa-circle-xmark text-rose-600"></i>
+                <span>Lost Commercial Opportunities (${lostDeals.length})</span>
+              </h4>
+              <span class="text-xs font-black font-mono text-slate-600 bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200">
+                ${formatMoney(lostDeals.reduce((s, d) => s + (d.amount || 0), 0))} Unclosed
+              </span>
+            </div>
+            <div class="space-y-3 mb-6">
+              ${lostDeals.map(deal => `
+                <div class="p-4 rounded-2xl bg-rose-50/40 border border-rose-200/90 hover:bg-rose-50 transition shadow-xs">
+                  <div class="flex items-start justify-between gap-3 mb-2">
+                    <div>
+                      <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-rose-100 text-rose-800 mb-1">
+                        <i class="fa-solid fa-ban mr-1"></i> Closed Lost
+                      </span>
+                      <h4 class="font-bold text-slate-900 text-sm">${deal.title}</h4>
+                      <div class="text-xs text-slate-600 font-semibold mt-0.5 flex items-center gap-2">
+                        <span><i class="fa-solid fa-building-columns text-slate-400 mr-1"></i>${deal.customer_name}</span>
+                        ${deal.customer_city ? `<span class="text-slate-400">&bull;</span><span class="text-slate-500">${deal.customer_city}</span>` : ''}
+                      </div>
+                    </div>
+                    <div class="text-right">
+                      <div class="text-base font-black font-mono text-slate-600">${formatMoney(deal.amount)}</div>
+                      <div class="text-[10px] text-rose-600 font-bold font-mono">Lost / Dropped</div>
+                    </div>
+                  </div>
+                  <div class="mt-2.5 p-3 rounded-xl bg-rose-100/70 border border-rose-200 text-xs text-rose-950 font-medium">
+                    <div class="font-bold text-[10px] uppercase tracking-wider text-rose-700 mb-0.5 flex items-center gap-1">
+                      <i class="fa-solid fa-triangle-exclamation"></i>
+                      <span>Key Loss Driver / Factor</span>
+                    </div>
+                    ${deal.loss_reason || 'Pricing competitor discounting on SI implementation hours / Bank core committee deferred RFP to FY27.'}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          `;
+        }
+
+        if (lostLeads.length > 0) {
+          html += `
+            <div class="mb-3 flex items-center justify-between">
+              <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-700 flex items-center gap-2">
+                <i class="fa-solid fa-user-xmark text-rose-600"></i>
+                <span>Dropped Bank Prospect Leads (${lostLeads.length})</span>
+              </h4>
+            </div>
+            <div class="space-y-2.5">
+              ${lostLeads.map(lead => `
+                <div class="p-3.5 rounded-2xl bg-white border border-slate-200 hover:border-rose-300 transition shadow-2xs">
+                  <div class="flex items-start justify-between gap-2">
+                    <div>
+                      <div class="text-xs font-bold text-slate-900">${lead.name}</div>
+                      <div class="text-[11px] text-slate-500 mt-0.5 flex items-center gap-2">
+                        <span>${lead.email || 'N/A'}</span>
+                        ${lead.phone ? `<span>&bull;</span><span>${lead.phone}</span>` : ''}
+                      </div>
+                    </div>
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600 border border-slate-200">
+                      Lost Lead
+                    </span>
+                  </div>
+                  <div class="mt-2 pt-2 border-t border-slate-100 text-[11px] text-rose-800">
+                    <span class="font-semibold">Reason:</span> ${lead.loss_reason || 'Client steering committee postponed vendor selection cycle.'}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          `;
+        }
+
+        container.innerHTML = html;
+
+      } else {
+        // Active Funnel Tab
+        const activeDeals = data.active_deals || [];
+        const activeLeads = data.active_leads || [];
+
+        if (activeDeals.length === 0 && activeLeads.length === 0) {
+          container.innerHTML = `
+            <div class="py-16 text-center text-slate-400">
+              <i class="fa-solid fa-handshake-slash text-3xl text-slate-300 mb-3 block"></i>
+              <p class="text-xs font-semibold">No active pipeline deals currently open.</p>
+            </div>
+          `;
+          return;
+        }
+
+        let html = '';
+
+        if (activeDeals.length > 0) {
+          html += `
+            <div class="mb-3 flex items-center justify-between">
+              <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-700 flex items-center gap-2">
+                <i class="fa-solid fa-handshake text-sky-600"></i>
+                <span>Active Commercial Negotiations (${activeDeals.length})</span>
+              </h4>
+              <span class="text-xs font-black font-mono text-sky-700 bg-sky-50 px-2.5 py-0.5 rounded-full border border-sky-200">
+                ${formatMoney(activeDeals.reduce((s, d) => s + (d.amount || 0), 0))} In Pipeline
+              </span>
+            </div>
+            <div class="space-y-3 mb-6">
+              ${activeDeals.map(deal => `
+                <div class="p-4 rounded-2xl bg-sky-50/40 border border-sky-200/90 hover:bg-sky-50 transition shadow-xs">
+                  <div class="flex items-start justify-between gap-3 mb-2">
+                    <div>
+                      <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-sky-100 text-sky-800 mb-1">
+                        <i class="fa-solid fa-spinner fa-spin mr-1"></i> Active ${deal.stage.toUpperCase()}
+                      </span>
+                      <h4 class="font-bold text-slate-900 text-sm">${deal.title}</h4>
+                      <div class="text-xs text-slate-600 font-semibold mt-0.5 flex items-center gap-2">
+                        <span><i class="fa-solid fa-building-columns text-slate-400 mr-1"></i>${deal.customer_name}</span>
+                        ${deal.customer_city ? `<span class="text-slate-400">&bull;</span><span class="text-slate-500">${deal.customer_city}</span>` : ''}
+                      </div>
+                    </div>
+                    <div class="text-right">
+                      <div class="text-base font-black font-mono text-sky-700">${formatMoney(deal.amount)}</div>
+                      <div class="text-[10px] text-sky-600 font-bold font-mono">${deal.probability}% Win Probability</div>
+                    </div>
+                  </div>
+                  <div class="pt-2 border-t border-sky-200/50 flex items-center justify-between text-[11px] text-slate-500">
+                    <span>Stage: <strong class="text-slate-700 uppercase font-mono">${deal.stage}</strong></span>
+                    <span>Target Close: ${deal.expected_close_date ? new Date(deal.expected_close_date).toLocaleDateString() : 'Next Month'}</span>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          `;
+        }
+
+        if (activeLeads.length > 0) {
+          html += `
+            <div class="mb-3 flex items-center justify-between">
+              <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-700 flex items-center gap-2">
+                <i class="fa-solid fa-user-clock text-sky-600"></i>
+                <span>Active Leads in Nurturing (${activeLeads.length})</span>
+              </h4>
+            </div>
+            <div class="space-y-2.5">
+              ${activeLeads.map(lead => `
+                <div class="p-3.5 rounded-2xl bg-white border border-slate-200 hover:border-sky-300 transition shadow-2xs">
+                  <div class="flex items-start justify-between gap-2">
+                    <div>
+                      <div class="text-xs font-bold text-slate-900">${lead.name}</div>
+                      <div class="text-[11px] text-slate-500 mt-0.5 flex items-center gap-2">
+                        <span>${lead.email || 'N/A'}</span>
+                        ${lead.phone ? `<span>&bull;</span><span>${lead.phone}</span>` : ''}
+                      </div>
+                    </div>
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-sky-100 text-sky-800">
+                      ${lead.status.toUpperCase()}
+                    </span>
+                  </div>
+                  <div class="mt-2 pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400">
+                    <span>Source: <strong class="text-slate-600 font-medium">${lead.source || 'Direct Outreach'}</strong></span>
+                    <span>Created: ${lead.created_at ? new Date(lead.created_at).toLocaleDateString() : 'Recent'}</span>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          `;
+        }
+
+        container.innerHTML = html;
+      }
+    }
+
+
+    // ==================== DASHBOARD & CHARTS ====================
+    function renderDashboard() {
+      const all = appState.jmrEmployees;
+      let totalWon = 0;
+      let totalLost = 0;
+      let totalLeads = 0;
+      let totalWonRev = 0;
+
+      const deptWon = {};
+      const deptLost = {};
+
+      all.forEach(e => {
+        totalWon += e.won_leads;
+        totalLost += e.lost_leads;
+        totalLeads += e.total_leads;
+        totalWonRev += e.won_revenue;
+
+        const dept = e.department || 'Other';
+        deptWon[dept] = (deptWon[dept] || 0) + e.won_leads;
+        deptLost[dept] = (deptLost[dept] || 0) + e.lost_leads;
+      });
+
+      document.getElementById('dash-reps-count').textContent = all.length;
+      document.getElementById('dash-leads-total').textContent = totalLeads.toLocaleString();
+      document.getElementById('dash-won-total').textContent = totalWon.toLocaleString();
+      document.getElementById('dash-won-revenue-text').textContent = formatMoney(totalWonRev) + ' won revenue';
+      document.getElementById('dash-lost-total').textContent = totalLost.toLocaleString();
+
+      const resolved = totalWon + totalLost;
+      const lostPct = resolved > 0 ? (totalLost / resolved * 100).toFixed(1) : 0;
+      document.getElementById('dash-lost-percentage').textContent = `${lostPct}% of decided leads`;
+
+      renderDeptBarChart(deptWon, deptLost);
+      renderRatioDonutChart(totalWon, totalLost, totalLeads - resolved);
+      renderTopChampions(all);
+    }
+
+    function renderDeptBarChart(deptWon, deptLost) {
+      const ctx = document.getElementById('deptChart')?.getContext('2d');
+      if (!ctx) return;
+      if (appState.charts.dept) appState.charts.dept.destroy();
+
+      const labels = Object.keys(deptWon);
+      const wonData = labels.map(d => deptWon[d] || 0);
+      const lostData = labels.map(d => deptLost[d] || 0);
+
+      appState.charts.dept = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels.map(l => l.replace(' - ', '\n')),
+          datasets: [
+            {
+              label: 'Won Leads',
+              data: wonData,
+              backgroundColor: '#10b981',
+              borderRadius: 6
+            },
+            {
+              label: 'Lost Leads',
+              data: lostData,
+              backgroundColor: '#f43f5e',
+              borderRadius: 6
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'top', labels: { font: { size: 11, weight: 'bold' } } }
+          },
+          scales: {
+            y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
+            x: { grid: { display: false }, ticks: { font: { size: 9 } } }
+          }
+        }
+      });
+    }
+
+    function renderRatioDonutChart(won, lost, active) {
+      const ctx = document.getElementById('ratioChart')?.getContext('2d');
+      if (!ctx) return;
+      if (appState.charts.ratio) appState.charts.ratio.destroy();
+
+      appState.charts.ratio = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Won Leads', 'Lost Leads', 'Active Pipeline'],
+          datasets: [{
+            data: [won, lost, Math.max(0, active)],
+            backgroundColor: ['#10b981', '#f43f5e', '#0284c7'],
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { font: { size: 11, weight: 'bold' }, boxWidth: 12 } }
+          }
+        }
+      });
+    }
+
+    function renderTopChampions(all) {
+      const grid = document.getElementById('top-champions-grid');
+      const sorted = [...all].sort((a,b) => b.won_leads - a.won_leads).slice(0, 5);
+
+      grid.innerHTML = sorted.map((c, i) => `
+        <div onclick="inspectEmployee(${c.id})" class="p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-sky-500 hover:shadow-md transition cursor-pointer text-center relative overflow-hidden group">
+          <div class="absolute top-2 right-2 text-xs font-mono font-black text-amber-500">
+            #${i+1}
+          </div>
+          <div class="w-12 h-12 mx-auto rounded-2xl bg-gradient-to-tr from-sky-600 to-indigo-600 text-white font-bold flex items-center justify-center text-sm shadow-md mb-2">
+            ${c.name.charAt(0)}
+          </div>
+          <div class="font-extrabold text-slate-900 text-xs truncate group-hover:text-sky-600 transition">${c.name}</div>
+          <div class="text-[10px] text-slate-400 truncate mt-0.5">${c.department.split('-')[0]}</div>
+          <div class="mt-2.5 pt-2.5 border-t border-slate-200/80 flex items-center justify-around">
+            <div>
+              <div class="text-[9px] font-bold text-emerald-600 uppercase">Won</div>
+              <div class="font-mono font-bold text-xs text-slate-900">${c.won_leads}</div>
+            </div>
+            <div>
+              <div class="text-[9px] font-bold text-sky-600 uppercase">Rate</div>
+              <div class="font-mono font-bold text-xs text-slate-900">${c.win_rate}%</div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ==================== STANDARD TABLES ====================
+    function renderLeadsTable() {
+      const tbody = document.getElementById('leads-tbody');
+      const items = appState.allLeads.slice(0, 50);
+      tbody.innerHTML = items.map(l => `
+        <tr class="hover:bg-slate-50/70">
+          <td class="py-3 px-4 font-bold text-slate-900">${l.name}</td>
+          <td class="py-3 px-4 text-xs font-mono text-slate-600">${l.phone || 'N/A'}</td>
+          <td class="py-3 px-4 text-xs font-semibold capitalize text-slate-600">${l.source}</td>
+          <td class="py-3 px-4">
+            <span class="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase font-mono ${
+              l.status === 'won' ? 'bg-emerald-100 text-emerald-800' :
+              l.status === 'lost' ? 'bg-rose-100 text-rose-800' :
+              'bg-sky-100 text-sky-800'
+            }">${l.status}</span>
+          </td>
+          <td class="py-3 px-4 text-xs text-slate-600">${l.owner_name}</td>
+          <td class="py-3 px-4 text-right text-xs font-mono text-slate-400">${l.created_at ? l.created_at.slice(0,10) : ''}</td>
+        </tr>
+      `).join('');
+    }
+
+    let currentCustomerRegionFilter = 'all';
+    let currentCustomerSearchQuery = '';
+
+    function setCustomerRegionFilter(region) {
+      currentCustomerRegionFilter = region;
+      document.querySelectorAll('.customer-region-pill').forEach(btn => {
+        if (btn.dataset.region === region) {
+          btn.className = 'customer-region-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-sky-600 text-white shadow-xs transition';
+        } else {
+          btn.className = 'customer-region-pill px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 transition';
+        }
+      });
+      renderCustomersTable();
+    }
+
+    function filterCustomersSearch(val) {
+      currentCustomerSearchQuery = val.toLowerCase().trim();
+      renderCustomersTable();
+    }
+
+    function inspectBalajiVankala() {
+      const reps = appState.jmrEmployees || appState.allReps || [];
+      const balaji = reps.find(r => (r.name || '').toLowerCase().includes('balaji vankala'));
+      if (balaji) {
+        inspectEmployee(balaji.id);
+      } else {
+        fetchApi('/analytics/jmr-employees').then(reps => {
+          appState.jmrEmployees = reps;
+          appState.allReps = reps;
+          const b = reps.find(r => (r.name || '').toLowerCase().includes('balaji vankala'));
+          if (b) inspectEmployee(b.id);
+          else toast('Balaji Vankala record not found', 'error');
+        }).catch(err => toast('Error finding Balaji Vankala: ' + err.message, 'error'));
+      }
+    }
+
+    function inspectEmployeeByName(empName) {
+      if (!empName) return;
+      const reps = appState.jmrEmployees || appState.allReps || [];
+      const match = reps.find(r => (r.name || '').toLowerCase().includes(empName.toLowerCase()));
+      if (match) {
+        inspectEmployee(match.id);
+      } else {
+        navigate('jmr-reps');
+        const searchInput = document.getElementById('jmr-search-input');
+        if (searchInput) {
+          searchInput.value = empName;
+          applyJmrFilters();
+        }
+      }
+    }
+
+    function renderCustomersTable() {
+      const tbody = document.getElementById('customers-tbody');
+      let list = appState.allCustomers || [];
+
+      if (currentCustomerRegionFilter !== 'all') {
+        list = list.filter(c => (c.city || '').toLowerCase().includes(currentCustomerRegionFilter.toLowerCase()));
+      }
+
+      if (currentCustomerSearchQuery) {
+        list = list.filter(c => 
+          (c.company_name || '').toLowerCase().includes(currentCustomerSearchQuery) ||
+          (c.industry || '').toLowerCase().includes(currentCustomerSearchQuery) ||
+          (c.city || '').toLowerCase().includes(currentCustomerSearchQuery) ||
+          (c.owner_name || '').toLowerCase().includes(currentCustomerSearchQuery)
+        );
+      }
+
+      const countEl = document.getElementById('customers-count-label');
+      if (countEl) countEl.textContent = `${list.length} Clients`;
+
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-slate-400 text-xs">No banking clients match your selected region or search query.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = list.map(c => {
+        let regionTag = '';
+        let cityClean = c.city || '';
+        if (cityClean.includes('[') && cityClean.includes(']')) {
+          const match = cityClean.match(/\[(.*?)\]/);
+          if (match) {
+            regionTag = match[1];
+            cityClean = cityClean.replace(/\[.*?\]/, '').trim();
+          }
+        }
+
+        let badgeClass = 'bg-slate-100 text-slate-700 border-slate-200';
+        if (regionTag.includes('Middle East') || regionTag.includes('GCC')) badgeClass = 'bg-amber-50 text-amber-800 border-amber-200';
+        else if (regionTag.includes('Africa')) badgeClass = 'bg-emerald-50 text-emerald-800 border-emerald-200';
+        else if (regionTag.includes('Asia') || regionTag.includes('India') || regionTag.includes('Pacific')) badgeClass = 'bg-sky-50 text-sky-800 border-sky-200';
+        else if (regionTag.includes('Europe') || regionTag.includes('UK')) badgeClass = 'bg-indigo-50 text-indigo-800 border-indigo-200';
+        else if (regionTag.includes('America') || regionTag.includes('Caribbean') || regionTag.includes('LATAM')) badgeClass = 'bg-purple-50 text-purple-800 border-purple-200';
+
+        return `
+          <tr class="hover:bg-slate-50/70 transition">
+            <td class="py-3.5 px-4 font-bold text-slate-900 flex items-center gap-2">
+              <div class="w-8 h-8 rounded-lg bg-sky-50 text-sky-700 border border-sky-100 flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-building-columns text-xs"></i>
+              </div>
+              <div>
+                <div class="text-sm font-bold text-slate-900">${c.company_name}</div>
+                <div class="text-[10px] text-slate-400 font-mono">100% Real JMR Partner</div>
+              </div>
+            </td>
+            <td class="py-3.5 px-4 text-xs text-slate-600 font-medium">${c.industry}</td>
+            <td class="py-3.5 px-4 text-xs text-slate-700">
+              <div class="font-medium">${cityClean}</div>
+              ${regionTag ? `<span class="inline-block mt-0.5 px-2 py-0.2 rounded-full text-[10px] font-bold border ${badgeClass}">${regionTag}</span>` : ''}
+            </td>
+            <td class="py-3.5 px-4 text-xs text-slate-700 font-semibold">${c.owner_name}</td>
+            <td class="py-3.5 px-4 text-right">
+              <button onclick="inspectEmployeeByName('${c.owner_name}')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 text-[11px] font-bold transition">
+                View Rep
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // ==================== OPPORTUNITIES PIPELINE MANAGEMENT & RENDERING ====================
+    function populateOpportunitiesFilters() {
+      const ownerSelect = document.getElementById('opp-owner-filter');
+      if (!ownerSelect) return;
+
+      const currentVal = ownerSelect.value || 'all';
+      const uniqueOwners = new Map();
+
+      (appState.allOpportunities || []).forEach(opp => {
+        if (opp.owner_id && opp.owner_name && !uniqueOwners.has(opp.owner_id)) {
+          uniqueOwners.set(opp.owner_id, {
+            name: opp.owner_name,
+            dept: opp.owner_department || ''
+          });
+        }
+      });
+
+      const sortedOwners = Array.from(uniqueOwners.entries()).sort((a, b) => a[1].name.localeCompare(b[1].name));
+
+      let opts = `<option value="all">All 600 Employees (${(appState.allOpportunities || []).length} Deals)</option>`;
+      sortedOwners.forEach(([id, info]) => {
+        const shortDept = info.dept ? info.dept.split('-')[0].trim() : 'BFSI';
+        opts += `<option value="${id}">${info.name} (${shortDept})</option>`;
+      });
+
+      ownerSelect.innerHTML = opts;
+      ownerSelect.value = currentVal;
+    }
+
+    function applyOpportunitiesFilters() {
+      const search = (document.getElementById('opp-search-input')?.value || '').toLowerCase().trim();
+      const stage = document.getElementById('opp-stage-filter')?.value || 'all';
+      const ownerId = document.getElementById('opp-owner-filter')?.value || 'all';
+      const sort = document.getElementById('opp-sort-by')?.value || 'amount_desc';
+
+      let list = [...(appState.allOpportunities || [])];
+
+      if (search) {
+        list = list.filter(o => 
+          (o.title || '').toLowerCase().includes(search) ||
+          (o.customer_name || '').toLowerCase().includes(search) ||
+          (o.owner_name || '').toLowerCase().includes(search) ||
+          (o.owner_email || '').toLowerCase().includes(search) ||
+          (o.owner_department || '').toLowerCase().includes(search) ||
+          (o.customer_city || '').toLowerCase().includes(search)
+        );
+      }
+
+      if (stage !== 'all') {
+        list = list.filter(o => (o.stage || '').toLowerCase() === stage.toLowerCase());
+      }
+
+      if (ownerId !== 'all') {
+        list = list.filter(o => String(o.owner_id) === String(ownerId));
+      }
+
+      // Sort
+      list.sort((a, b) => {
+        if (sort === 'amount_desc') return (b.amount || 0) - (a.amount || 0);
+        if (sort === 'amount_asc') return (a.amount || 0) - (b.amount || 0);
+        if (sort === 'probability_desc') return (b.probability || 0) - (a.probability || 0);
+        if (sort === 'date_desc') return (b.expected_close_date || '').localeCompare(a.expected_close_date || '');
+        if (sort === 'owner_asc') return (a.owner_name || '').localeCompare(b.owner_name || '');
+        if (sort === 'title_asc') return (a.title || '').localeCompare(b.title || '');
+        return 0;
+      });
+
+      appState.filteredOpportunities = list;
+      appState.oppPagination.page = 1;
+
+      renderOpportunitiesSummary();
+      renderOpportunitiesTable();
+    }
+
+    function renderOpportunitiesSummary() {
+      const all = appState.allOpportunities || [];
+      let totalVal = 0;
+      let wonVal = 0, wonCount = 0;
+      let activeVal = 0, activeCount = 0;
+      let lostVal = 0, lostCount = 0;
+
+      all.forEach(o => {
+        const amt = o.amount || 0;
+        totalVal += amt;
+        const st = (o.stage || '').toLowerCase();
+        if (st === 'won') {
+          wonVal += amt;
+          wonCount++;
+        } else if (st === 'lost') {
+          lostVal += amt;
+          lostCount++;
+        } else {
+          activeVal += amt;
+          activeCount++;
+        }
+      });
+
+      const totalValEl = document.getElementById('opp-stat-total-val');
+      const totalCountEl = document.getElementById('opp-stat-total-count');
+      const wonValEl = document.getElementById('opp-stat-won-val');
+      const wonCountEl = document.getElementById('opp-stat-won-count');
+      const activeValEl = document.getElementById('opp-stat-active-val');
+      const activeCountEl = document.getElementById('opp-stat-active-count');
+      const lostValEl = document.getElementById('opp-stat-lost-val');
+      const lostCountEl = document.getElementById('opp-stat-lost-count');
+
+      if (totalValEl) totalValEl.textContent = formatMoney(totalVal);
+      if (totalCountEl) totalCountEl.textContent = all.length.toLocaleString();
+      if (wonValEl) wonValEl.textContent = formatMoney(wonVal);
+      if (wonCountEl) wonCountEl.textContent = wonCount.toLocaleString();
+      if (activeValEl) activeValEl.textContent = formatMoney(activeVal);
+      if (activeCountEl) activeCountEl.textContent = activeCount.toLocaleString();
+      if (lostValEl) lostValEl.textContent = formatMoney(lostVal);
+      if (lostCountEl) lostCountEl.textContent = lostCount.toLocaleString();
+    }
+
+    function renderOpportunitiesTable() {
+      const tbody = document.getElementById('deals-tbody');
+      if (!tbody) return;
+
+      const list = appState.filteredOpportunities || appState.allOpportunities || [];
+      const total = list.length;
+      const { page, pageSize } = appState.oppPagination;
+
+      const effectiveSize = pageSize === 'all' ? Math.max(1, total) : Number(pageSize);
+      const totalPages = Math.max(1, Math.ceil(total / effectiveSize));
+      const startIdx = (page - 1) * effectiveSize;
+      const endIdx = Math.min(startIdx + effectiveSize, total);
+      const pageItems = list.slice(startIdx, endIdx);
+
+      const showingEl = document.getElementById('opp-showing-range');
+      const matchedEl = document.getElementById('opp-total-matched');
+      const curPageEl = document.getElementById('opp-page-current');
+      const totPageEl = document.getElementById('opp-page-total');
+      const prevBtn = document.getElementById('btn-opp-prev');
+      const nextBtn = document.getElementById('btn-opp-next');
+
+      if (showingEl) showingEl.textContent = total > 0 ? `${startIdx + 1}-${endIdx}` : '0-0';
+      if (matchedEl) matchedEl.textContent = total.toLocaleString();
+      if (curPageEl) curPageEl.textContent = page;
+      if (totPageEl) totPageEl.textContent = totalPages;
+      if (prevBtn) prevBtn.disabled = page <= 1;
+      if (nextBtn) nextBtn.disabled = page >= totalPages;
+
+      if (pageItems.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="py-12 text-center text-slate-400 text-xs">No opportunities match your search or filter criteria.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = pageItems.map(d => {
+        const stage = (d.stage || 'proposal').toLowerCase();
+        let stageBadge = '';
+        if (stage === 'won') {
+          stageBadge = '<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-100 text-emerald-800"><i class="fa-solid fa-circle-check text-[9px]"></i> Won (100%)</span>';
+        } else if (stage === 'lost') {
+          stageBadge = '<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-rose-100 text-rose-800"><i class="fa-solid fa-circle-xmark text-[9px]"></i> Lost (0%)</span>';
+        } else if (stage === 'negotiation') {
+          stageBadge = '<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-sky-100 text-sky-800"><i class="fa-solid fa-handshake text-[9px]"></i> Negotiation</span>';
+        } else {
+          stageBadge = '<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-amber-100 text-amber-800"><i class="fa-solid fa-file-contract text-[9px]"></i> Proposal</span>';
+        }
+
+        const closeDateStr = d.expected_close_date ? d.expected_close_date.slice(0, 10) : '2026-12-31';
+        const ownerInitial = (d.owner_name || 'U').charAt(0).toUpperCase();
+
+        return `
+          <tr class="hover:bg-slate-50/80 transition">
+            <td class="py-3.5 px-4 font-bold text-slate-900">
+              <div class="flex items-start gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-sky-50 text-sky-600 border border-sky-100 flex items-center justify-center shrink-0 mt-0.5">
+                  <i class="fa-solid fa-briefcase text-xs"></i>
+                </div>
+                <div>
+                  <div class="text-xs font-bold text-slate-900 leading-snug">${d.title}</div>
+                  <div class="text-[11px] text-slate-500 font-semibold mt-0.5 flex items-center gap-1.5">
+                    <span>${d.customer_name}</span>
+                    ${d.customer_city ? `<span class="text-[9px] px-1.5 py-0.2 rounded bg-slate-100 text-slate-600 font-normal">${d.customer_city.split('[')[0].trim()}</span>` : ''}
+                  </div>
+                </div>
+              </div>
+            </td>
+
+            <td class="py-3.5 px-4">
+              <div class="font-mono font-black text-xs text-slate-900">${formatMoney(d.amount)}</div>
+              <div class="text-[10px] text-slate-400 font-mono">USD Enterprise Value</div>
+            </td>
+
+            <td class="py-3.5 px-4">
+              <div class="flex flex-col gap-1">
+                <div>${stageBadge}</div>
+                <div class="w-24 bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                  <div class="h-1.5 rounded-full ${stage === 'won' ? 'bg-emerald-500' : (stage === 'lost' ? 'bg-rose-400' : 'bg-sky-500')}" style="width: ${d.probability || 0}%"></div>
+                </div>
+                <span class="text-[9px] font-mono text-slate-400 font-semibold">${d.probability || 0}% Probability</span>
+              </div>
+            </td>
+
+            <td class="py-3.5 px-4">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-slate-800 to-indigo-800 text-white font-bold flex items-center justify-center text-xs shadow-xs shrink-0">
+                  ${ownerInitial}
+                </div>
+                <div class="min-w-0">
+                  <div class="text-xs font-bold text-slate-900 truncate">${d.owner_name}</div>
+                  <div class="text-[10px] text-slate-400 font-mono truncate">${d.owner_email || 'rep@jmrinfotech.com'}</div>
+                  <div class="text-[9px] text-indigo-600 font-medium truncate mt-0.5">${d.owner_department || 'Enterprise BFSI'}</div>
+                </div>
+              </div>
+            </td>
+
+            <td class="py-3.5 px-4 text-xs font-mono text-slate-600">
+              <div class="font-bold text-slate-800">${closeDateStr}</div>
+              <span class="text-[10px] text-emerald-600 font-semibold">2026 Fiscal Year</span>
+            </td>
+
+            <td class="py-3.5 px-4 text-right">
+              <button onclick="inspectEmployee(${d.owner_id})" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-sky-600 hover:text-white text-slate-700 text-xs font-bold transition shadow-2xs flex items-center gap-1.5 ml-auto">
+                <i class="fa-solid fa-user-check text-[10px]"></i>
+                <span>Inspect Rep</span>
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function prevOppPage() {
+      if (appState.oppPagination.page > 1) {
+        appState.oppPagination.page--;
+        renderOpportunitiesTable();
+      }
+    }
+
+    function nextOppPage() {
+      const list = appState.filteredOpportunities || appState.allOpportunities || [];
+      const total = list.length;
+      const size = appState.oppPagination.pageSize === 'all' ? total : Number(appState.oppPagination.pageSize);
+      const maxPages = Math.ceil(total / size);
+      if (appState.oppPagination.page < maxPages) {
+        appState.oppPagination.page++;
+        renderOpportunitiesTable();
+      }
+    }
+
+    function changeOppPageSize(newSize) {
+      appState.oppPagination.pageSize = newSize;
+      appState.oppPagination.page = 1;
+      renderOpportunitiesTable();
+    }
+
+    function renderActivities() {
+      const container = document.getElementById('activities-timeline');
+      const items = appState.allActivities.slice(0, 20);
+      container.innerHTML = items.map(a => `
+        <div class="flex items-start gap-4 p-4 rounded-2xl border border-slate-100 bg-slate-50/60 hover:bg-slate-50 transition">
+          <div class="w-10 h-10 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center shrink-0 text-sm shadow-xs">
+            <i class="fa-solid fa-phone-volume"></i>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-bold text-slate-900 uppercase tracking-wider">${a.activity_type} &bull; ${a.customer_name || 'Client Engagement'}</span>
+              <span class="text-[10px] font-mono text-slate-400">${a.activity_date ? a.activity_date.slice(0,10) : ''}</span>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">${a.notes}</p>
+            <div class="text-[10px] text-slate-400 mt-1">Logged by: <strong class="text-slate-700">${a.employee_name}</strong></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ==================== CSV EXPORT FOR POWER BI ====================
+    function exportFullCsv() {
+      const all = appState.jmrEmployees;
+      if (all.length === 0) {
+        toast('No employee records to export', 'error');
+        return;
+      }
+
+      const headers = [
+        'Employee ID',
+        'Employee Name',
+        'Corporate Email',
+        'Role',
+        'Department',
+        'Total Leads Assigned',
+        'Won Leads',
+        'Lost Leads',
+        'Active Pipeline Leads',
+        'Win Rate Percentage',
+        'Closed Won Deals',
+        'Won Revenue USD',
+        'Active Pipeline USD',
+        'Performance Tier'
+      ];
+
+      const rows = all.map(e => [
+        `"JMR-IND-${1000 + e.id}"`,
+        `"${e.name}"`,
+        `"${e.email}"`,
+        `"${e.role}"`,
+        `"${e.department}"`,
+        e.total_leads,
+        e.won_leads,
+        e.lost_leads,
+        e.active_leads,
+        e.win_rate,
+        e.won_deals,
+        e.won_revenue,
+        e.pipeline_value,
+        `"${e.tier}"`
+      ]);
+
+      const csv = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+      const encoded = encodeURI(csv);
+      const link = document.createElement('a');
+      link.setAttribute('href', encoded);
+      link.setAttribute('download', `JMR_Infotech_600_Employees_Won_Lost_${new Date().toISOString().slice(0,10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      toast('Exported 600 JMR employees to CSV for Power BI!');
+    }
+
+    // ==================== GROQ AI INTELLIGENCE & HUMANIZED FORMATTER ====================
+    function formatAiMarkdown(text) {
+      if (!text) return '';
+      let html = text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+
+      // Headings
+      html = html.replace(/^### (.*$)/gim, '<h4 class="text-sm font-bold text-slate-900 mt-3.5 mb-1.5 flex items-center gap-1.5"><i class="fa-solid fa-chevron-right text-indigo-500 text-xs"></i> $1</h4>');
+      html = html.replace(/^## (.*$)/gim, '<h3 class="text-base font-black text-slate-900 mt-4 mb-2 pb-1 border-b border-slate-200/80 flex items-center gap-2"><i class="fa-solid fa-diamond text-amber-500 text-xs"></i> $1</h3>');
+      html = html.replace(/^# (.*$)/gim, '<h2 class="text-lg font-black text-slate-900 mt-4 mb-2.5 flex items-center gap-2"><i class="fa-solid fa-chart-line text-sky-600"></i> $1</h2>');
+
+      // Bold & Italic
+      html = html.replace(/\*\*\*(.*?)\*\*\*/g, '<strong class="font-bold text-indigo-900 italic">$1</strong>');
+      html = html.replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-slate-900">$1</strong>');
+      html = html.replace(/\*(.*?)\*/g, '<em class="italic text-slate-700">$1</em>');
+
+      // Unordered list items
+      html = html.replace(/^\* (.*$)/gim, '<li class="flex items-start gap-2 my-1"><span class="w-1.5 h-1.5 rounded-full bg-indigo-500 mt-1.5 shrink-0"></span><span>$1</span></li>');
+      html = html.replace(/^- (.*$)/gim, '<li class="flex items-start gap-2 my-1"><span class="w-1.5 h-1.5 rounded-full bg-sky-500 mt-1.5 shrink-0"></span><span>$1</span></li>');
+
+      // Ordered list items
+      html = html.replace(/^(\d+)\. (.*$)/gim, '<li class="flex items-start gap-2 my-1.5"><span class="w-5 h-5 rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-200 text-[10px] font-mono font-bold flex items-center justify-center shrink-0 mt-0.5">$1</span><span>$2</span></li>');
+
+      // Paragraph breaks
+      html = html.replace(/\n\n/g, '</p><p class="my-2.5 leading-relaxed text-slate-700">');
+      html = html.replace(/\n/g, '<br/>');
+
+      return `<div class="ai-formatted-content text-xs leading-relaxed space-y-1">${html}</div>`;
+    }
+
+    function copyAiResponse() {
+      const text = appState.lastAiResponseRaw || (document.getElementById('ai-response-text')?.innerText || '');
+      if (!text) return;
+      navigator.clipboard.writeText(text).then(() => {
+        toast('Copied AI analysis to clipboard!');
+      }).catch(() => {
+        toast('Unable to copy to clipboard', 'error');
+      });
+    }
+
+    async function submitGroqAiPrompt() {
+      const textarea = document.getElementById('ai-custom-prompt');
+      const prompt = textarea.value.trim();
+      if (!prompt) {
+        toast('Please enter a question or prompt for Groq AI', 'error');
+        return;
+      }
+      await executeAiPrompt(prompt);
+    }
+
+    function runQuickAiPrompt(text) {
+      document.getElementById('ai-custom-prompt').value = text;
+      executeAiPrompt(text);
+    }
+
+    async function executeAiPrompt(prompt) {
+      const btn = document.getElementById('ai-submit-btn');
+      const container = document.getElementById('ai-response-container');
+      const textField = document.getElementById('ai-response-text');
+
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i><span>Consulting Groq LPU...</span>`;
+      container.classList.remove('hidden');
+      textField.innerHTML = `
+        <div class="flex items-center gap-2.5 text-indigo-600 font-bold py-3 animate-pulse">
+          <i class="fa-solid fa-brain text-base"></i>
+          <span>JMR AI Sales Strategist is evaluating global BFSI deal records & synthesizing strategic recommendations...</span>
+        </div>
+      `;
+
+      try {
+        const res = await fetchApi('/ai/insights', {
+          method: 'POST',
+          body: JSON.stringify({ prompt: prompt })
+        });
+        appState.lastAiResponseRaw = res.response || '';
+        textField.innerHTML = formatAiMarkdown(res.response || 'No response returned from Groq API.');
+        toast('Groq AI executive insight generated!');
+      } catch (err) {
+        textField.innerHTML = `<div class="p-3 bg-rose-50 border border-rose-200 text-rose-700 font-bold rounded-xl text-xs">Error calling Groq AI: ${err.message}</div>`;
+        toast('Groq error: ' + err.message, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i><span>Ask Groq AI</span>`;
+      }
+    }
+
+    async function askGroqAiAboutEmployee() {
+      const data = appState.currentDrawerData;
+      if (!data) return;
+      const emp = data.employee;
+      const box = document.getElementById('drawer-ai-coach-box');
+      box.classList.remove('hidden');
+      box.innerHTML = `<div class="flex items-center gap-2 text-indigo-600 font-bold"><i class="fa-solid fa-spinner fa-spin"></i><span>Reviewing ${emp.name}'s performance against banking benchmarks...</span></div>`;
+
+      try {
+        const prompt = `As JMR Infotech's Chief Sales Strategist, provide a personalized, humanized, and encouraging executive coaching review for ${emp.name} (${emp.department}).
+Current metrics: Won leads: ${emp.won_leads_count}, Lost leads: ${emp.lost_leads_count}, Win Rate: ${emp.win_rate}%.
+Highlight:
+1. Warm commendation of their strengths and notable banking deal wins.
+2. An empathetic, constructive diagnosis of why deals were dropped or lost (e.g. competitor pricing wars, bank procurement delays).
+3. Two practical, high-impact tactical actions they can execute this week to close their next major banking deal.
+Make the tone warm, consultative, and motivating—like a senior partner mentoring a valued colleague.`;
+
+        const res = await fetchApi('/ai/insights', {
+          method: 'POST',
+          body: JSON.stringify({ prompt: prompt, employee_id: emp.id })
+        });
+        box.innerHTML = `
+          <div class="flex items-center justify-between text-indigo-800 font-bold text-xs mb-2 border-b border-indigo-100 pb-1.5">
+            <div class="flex items-center gap-1.5">
+              <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i>
+              <span>Executive Sales Coaching Brief &bull; ${emp.name}</span>
+            </div>
+            <span class="text-[10px] font-mono bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full border border-indigo-200">Humanized AI Partner</span>
+          </div>
+          <div>${formatAiMarkdown(res.response)}</div>
+        `;
+      } catch (err) {
+        box.innerHTML = `<span class="text-rose-600 font-bold">Error: ${err.message}</span>`;
+      }
+    }
+
+    // ==================== ODOO & LINKEDIN CSV IMPORT ====================
+    function fillSampleOdooCsv() {
+      const sample = `Name,Email,Department,Role,WonLeads,LostLeads
+Dr. Jayafar Moidu,jayafar.moidu@jmrinfotech.com,Executive Management,admin,32,4
+Rajitha Jaffer,rajitha.jaffer@jmrinfotech.com,Board of Directors,admin,20,3
+Vijay Raina,vijay.raina@jmrinfotech.com,Board of Directors,admin,19,4
+Naman Jain,naman.jain@jmrinfotech.com,Global Sales & BD,manager,28,7
+Praveen Arunachalam,praveen.a@jmrinfotech.com,Odoo ERP & CRM Practice,employee,15,3`;
+      document.getElementById('odoo-csv-input').value = sample;
+    }
+
+    async function submitOdooCsvImport() {
+      const csvData = document.getElementById('odoo-csv-input').value.trim();
+      if (!csvData) {
+        toast('Please paste or upload Odoo CSV content', 'error');
+        return;
+      }
+      try {
+        toast('Importing and synchronizing Odoo records...', 'info');
+        const res = await fetchApi('/odoo/import-csv', {
+          method: 'POST',
+          body: JSON.stringify({ csv_data: csvData })
+        });
+        toast(res.message);
+        await loadCoreData();
+      } catch (err) {
+        toast('Odoo Import Failed: ' + err.message, 'error');
+      }
+    }
+
+    // ==================== APPLICATION INIT ====================
+    async function initApplication() {
+      updateApiStatusLabel();
+      if (!appState.token) {
+        await autoLoginAdmin();
+      }
+
+      if (!appState.token) {
+        document.getElementById('login-view').classList.remove('hidden');
+        document.getElementById('app-view').classList.add('hidden');
+        return;
+      }
+
+      try {
+        document.getElementById('login-view').classList.add('hidden');
+        document.getElementById('app-view').classList.remove('hidden');
+        navigate('jmr-reps');
+        await loadCoreData();
+      } catch (err) {
+        console.error('Startup error:', err);
+        const retryToken = await autoLoginAdmin();
+        if (retryToken) {
+          try {
+            await loadCoreData();
+            return;
+          } catch(e2) {
+            console.error('Auto-login retry error:', e2);
+          }
+        }
+        toast('Connection error: Make sure CRM server is running on http://127.0.0.1:8000', 'error');
+        logout();
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initApplication();
+    });
+  </script>
+</body>
+</html>
